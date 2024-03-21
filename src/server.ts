@@ -1,5 +1,5 @@
 import express from 'express';
-import taskRouter from './routes'
+import taskRouter from './routes';
 
 class Server {
   public server: express.Express;
