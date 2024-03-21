@@ -1,25 +1,16 @@
 import express from 'express';
+import TaskController from './task/controller/taskController';
 
 const taskRouter = express.Router();
 
-taskRouter.post('/task', (req, res) => {
-  res.send('Create task');
-});
+taskRouter.post('/task', TaskController.CreateTask);
 
-taskRouter.get('/task', (req, res) => {
-  res.send('Get all tasks');
-});
+taskRouter.get('/task', TaskController.getTasks);
 
-taskRouter.get('/task/:id', (req, res) => {
-  res.send('Get task by id');
-});
+taskRouter.get('/task/:id', TaskController.getSingleTask);
 
-taskRouter.put('/task/:id', (req, res) => {
-  res.send('Update task');
-});
+taskRouter.put('/task/:id', TaskController.updateTask);
 
-taskRouter.delete('/task/:id', (req, res) => {
-  res.send('Delete task');
-});
+taskRouter.delete('/task/:id', TaskController.deleteTask);
 
 export default taskRouter;
