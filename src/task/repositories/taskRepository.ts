@@ -14,8 +14,14 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static getAll() {
-    return 'Get all';
+  static async getAll() {
+    const status: number = StatusCodes.OK;
+    const message: string = 'All task were retrieved';
+    const success: boolean = true;
+
+    const result = await taskSchema.find();
+
+    return { success, status, message, result };
   }
 
   static getById() {

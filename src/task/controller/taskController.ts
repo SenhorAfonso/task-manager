@@ -13,12 +13,13 @@ class TaskController {
     res.status(status).json({ success, message, result });
   }
 
-  static getTasks (
+  static async getTasks (
     req: Request,
     res: Response
   ) {
-    const result = TaskService.getAllTasks();
-    res.send(result);
+    const { success, status, message, result } = await TaskService.getAllTasks();
+
+    res.status(status).json({ success, message, result });
   }
 
   static getSingleTask (
