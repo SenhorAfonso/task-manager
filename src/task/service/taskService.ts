@@ -1,9 +1,13 @@
 import createTask from '../DTOs/createTask';
 import TaskRepository from '../repositories/taskRepository';
+import TaskUtils from '../utils/taskUtils';
 
 class TaskService {
 
   static createTask(createTaskPayload: createTask) {
+    const now = TaskUtils.getNowDate();
+    createTaskPayload.date_creation = now;
+
     const result = TaskRepository.create(createTaskPayload);
     return result;
   }
