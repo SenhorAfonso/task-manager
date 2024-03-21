@@ -1,9 +1,11 @@
 import createTask from '../DTOs/createTask';
+import taskSchema from '../schema/taskSchema';
 
 class TaskRepository {
 
-  static create(createTaskPayload: createTask) {
-    return createTaskPayload;
+  static async create(createTaskPayload: createTask) {
+    const result = await taskSchema.create(createTaskPayload);
+    return result;
   }
 
   static getAll() {
