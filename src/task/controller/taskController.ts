@@ -1,4 +1,5 @@
 import { Response, Request } from 'express';
+import TaskService from '../service/taskService';
 
 class TaskController {
 
@@ -6,35 +7,40 @@ class TaskController {
     req: Request,
     res: Response
   ) {
-    res.send('Create task');
+    const result = TaskService.createTask();
+    res.send(result);
   }
 
   static getTasks (
     req: Request,
     res: Response
   ) {
-    res.send('Retrieve all Tasks');
+    const result = TaskService.getAllTasks();
+    res.send(result);
   }
 
   static getSingleTask (
     req: Request,
     res: Response
   ) {
-    res.send('Get Task by Id');
+    const result = TaskService.getSingleTask();
+    res.send(result);
   }
 
   static updateTask (
     req: Request,
     res: Response
   ) {
-    res.send('Update Task');
+    const result = TaskService.updateTask();
+    res.send(result);
   }
 
   static deleteTask (
     req: Request,
     res: Response
   ) {
-    res.send('Delete task');
+    const result = TaskService.deleteTask();
+    res.send(result);
   }
 
 }
