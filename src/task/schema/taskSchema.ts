@@ -38,4 +38,4 @@ const taskSchema = new mongoose.Schema({
   }
 });
 
-export default new mongoose.Model('taskModel', taskSchema);
+export default mongoose.model('taskModel', taskSchema);
