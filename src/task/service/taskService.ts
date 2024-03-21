@@ -1,9 +1,10 @@
+import createTask from '../DTOs/createTask';
 import TaskRepository from '../repositories/taskRepository';
 
 class TaskService {
 
-  static createTask() {
-    const result = TaskRepository.create();
+  static createTask(createTaskPayload: createTask) {
+    const result = TaskRepository.create(createTaskPayload);
     return result;
   }
 

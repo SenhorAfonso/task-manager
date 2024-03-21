@@ -7,7 +7,9 @@ class TaskController {
     req: Request,
     res: Response
   ) {
-    const result = TaskService.createTask();
+    const { title, description, type, category } = req.body;
+    const result = TaskService.createTask({ title, description, type, category });
+
     res.send(result);
   }
 

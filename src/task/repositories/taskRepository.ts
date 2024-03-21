@@ -1,7 +1,9 @@
+import createTask from '../DTOs/createTask';
+
 class TaskRepository {
 
-  static create() {
-    return 'Create task';
+  static create(createTaskPayload: createTask) {
+    return createTaskPayload;
   }
 
   static getAll() {
