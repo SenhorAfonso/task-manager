@@ -1,11 +1,17 @@
+import { StatusCodes } from 'http-status-codes';
 import createTask from '../DTOs/createTask';
 import taskSchema from '../schema/taskSchema';
 
 class TaskRepository {
 
   static async create(createTaskPayload: createTask) {
+    const status: number = StatusCodes.CREATED;
+    const message: string = 'Task successfully created!';
+    const success: boolean = true;
+
     const result = await taskSchema.create(createTaskPayload);
-    return result;
+
+    return { success, status, message, result };
   }
 
   static getAll() {

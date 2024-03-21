@@ -3,14 +3,14 @@ import TaskService from '../service/taskService';
 
 class TaskController {
 
-  static CreateTask (
+  static async CreateTask (
     req: Request,
     res: Response
   ) {
     const { title, description, type, category } = req.body;
-    const result = TaskService.createTask({ title, description, type, category });
+    const { success, status, message, result } = await TaskService.createTask({ title, description, type, category });
 
-    res.send(result);
+    res.status(status).json({ success, message, result });
   }
 
   static getTasks (
