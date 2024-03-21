@@ -1,4 +1,4 @@
-import server from "./server";
+import server from './server';
 
 class App {
   constructor() {
@@ -8,7 +8,7 @@ class App {
   private start() {
     server.listen(3000, () => {
       console.log('server is listenin at 3000 port!');
-    })
+    });
   }
 }
 

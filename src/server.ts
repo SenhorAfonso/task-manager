@@ -1,5 +1,4 @@
-import express from "express"
-
+import express from 'express';
 
 class Server {
   public server: express.Express;
@@ -12,9 +11,9 @@ class Server {
   middlewares() {
     this.server.use(express.json());
     this.server.use('/api/v1/', (req, res) => {
-      res.send('Server is up')
+      res.send('Server is up');
     });
-  } 
+  }
 }
 
 export default new Server().server;
