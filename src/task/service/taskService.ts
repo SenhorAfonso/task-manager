@@ -1,24 +1,30 @@
-// conectar com a camada de repository -> banco
+import TaskRepository from '../repositories/taskRepository';
+
 class TaskService {
 
   static createTask() {
-    return 'Create task';
+    const result = TaskRepository.create();
+    return result;
   }
 
   static getAllTasks() {
-    return 'Retrieve all Tasks';
+    const result = TaskRepository.getAll();
+    return result;
   }
 
   static getSingleTask() {
-    return 'Get task by id';
+    const result = TaskRepository.getById();
+    return result;
   }
 
   static updateTask() {
-    return 'Update task';
+    const result = TaskRepository.update();
+    return result;
   }
 
   static deleteTask() {
-    return 'delete task';
+    const result = TaskRepository.delete();
+    return result;
   }
 
 }
