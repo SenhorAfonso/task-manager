@@ -1,5 +1,6 @@
 enum ApiErrorName {
-  InternalServerError = 'InternalServerError'
+  InternalServerError = 'InternalServerError',
+  BadRequestError = 'BadRequestError'
 }
 
 export default ApiErrorName;
