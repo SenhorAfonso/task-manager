@@ -13,7 +13,9 @@ taskRouter.get('/task', TaskController.getTasks);
 
 taskRouter.get('/task/:id', TaskController.getSingleTask);
 
-taskRouter.put('/task/:id', TaskController.updateTask);
+taskRouter.put('/task/:id', [
+  ValidationMiddleware.ValidatePayload(ValidateTask.updateTask(), 'body')
+], TaskController.updateTask);
 
 taskRouter.delete('/task/:id', TaskController.deleteTask);
 

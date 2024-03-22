@@ -25,6 +25,26 @@ class ValidateTask {
     return createTaskValidator;
   }
 
+  static updateTask() {
+    const updateTaskValidator = Joi.object({
+      title: Joi.string()
+        .min(MIN_TITLE_LENGTH)
+        .required(),
+
+      description: Joi.string()
+        .min(MIN_DESCRIPTION_LENGTH)
+        .required(),
+
+      type: Joi.string()
+        .required(),
+
+      category: Joi.string()
+        .required()
+    });
+
+    return updateTaskValidator;
+  }
+
 }
 
 export default ValidateTask;
