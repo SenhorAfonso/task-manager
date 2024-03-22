@@ -46,8 +46,13 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static delete() {
-    return 'delete';
+  static async delete(taskId: ITaskId) {
+    const status: number = StatusCodes.OK;
+    const message: string = 'Task were succesfully deleted!';
+    const success: boolean = true;
+
+    const result = await taskSchema.findByIdAndDelete(taskId);
+    return { success, status, message, result };
   }
 
 }

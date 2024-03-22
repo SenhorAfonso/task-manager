@@ -43,12 +43,14 @@ class TaskController {
     res.status(status).json({ success, message, result });
   }
 
-  static deleteTask (
+  static async deleteTask (
     req: Request,
     res: Response
   ) {
-    const result = TaskService.deleteTask();
-    res.send(result);
+    const { id } = req.params;
+
+    const { success, status, message, result } = await TaskService.deleteTask({ _id: id });
+    res.status(status).json({ success, message, 'deleted task': result });
   }
 
 }
