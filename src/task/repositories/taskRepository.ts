@@ -7,6 +7,7 @@ import ITaskId from '../DTOs/ITaskId';
 import IUpdateTask from '../DTOs/updateTask';
 import InternalServerError from '../../errors/internalServerError';
 import NotFoundError from '../../errors/notFoundError';
+import BadRequestError from '../../errors/badRequestError';
 
 class TaskRepository {
 
@@ -51,7 +52,21 @@ class TaskRepository {
     const message: string = 'Single task were retrieved!';
     const success: boolean = true;
 
-    const result = await taskSchema.findById({ _id: getSingleTask.taskId });
+    let result: mongoose.Document | null;
+
+    try {
+      result = await taskSchema.findById({ _id: getSingleTask.taskId });
+    } catch (error) {
+      if (error instanceof mongoose.Error.CastError) {
+        throw new BadRequestError();
+      } else {
+        throw new InternalServerError();
+      }
+    }
+
+    if (result === null) {
+      throw new NotFoundError();
+    }
 
     return { success, status, message, result };
   }
