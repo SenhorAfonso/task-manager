@@ -29,11 +29,13 @@
   },
   "dependencies": {
     "@types/express": "^4.17.21",
+    "@types/joi": "^17.2.3",
     "@types/node": "^20.11.30",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.1",
     "http-status-codes": "^2.3.0",
+    "joi": "^17.12.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.2"
   }
