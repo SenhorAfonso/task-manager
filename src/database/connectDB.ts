@@ -1,3 +1,4 @@
+import InternalServerError from '../errors/internalServerError';
 import IORM from './interfaces/ORM';
 
 class DataBase {
@@ -14,7 +15,7 @@ class DataBase {
       await this.ORM.connect(this.URL);
     } catch (error) {
       await this.ORM.disconnect();
-      throw new Error('Internal Server Error');
+      throw new InternalServerError('Internal Server Error');
     }
   }
 }
