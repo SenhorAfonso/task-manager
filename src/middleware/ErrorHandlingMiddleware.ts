@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import StatusCodes from 'http-status-codes';
 import ApiError from '../errors/apiError';
 
 class ErrorHandlingMiddleware {
@@ -11,6 +12,8 @@ class ErrorHandlingMiddleware {
   ) {
     if (error instanceof ApiError) {
       res.status(error.status).json({ error: error.name });
+    } else {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
     }
   }
 
