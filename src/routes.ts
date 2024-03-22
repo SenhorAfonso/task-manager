@@ -1,6 +1,6 @@
 import express from 'express';
 import TaskController from './task/controller/taskController';
-import ValidationMiddleware from './task/middleware/ValidationMiddleware';
+import ValidationMiddleware from './middleware/ValidationMiddleware';
 import ValidateTask from './task/validations/validateTask';
 
 const taskRouter = express.Router();
