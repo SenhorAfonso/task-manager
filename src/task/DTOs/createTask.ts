@@ -1,4 +1,4 @@
-interface createTask {
+interface IcreateTask {
   title: string,
   description: string,
   date_creation?: Date,
@@ -9,4 +9,4 @@ interface createTask {
   userId?: string
 }
 
-export default createTask;
+export default IcreateTask;
