@@ -1,10 +1,11 @@
 import { StatusCodes } from 'http-status-codes';
-import createTask from '../DTOs/createTask';
+import IcreateTask from '../DTOs/createTask';
 import taskSchema from '../schema/taskSchema';
+import IgetSingleTask from '../DTOs/getSingleTask';
 
 class TaskRepository {
 
-  static async create(createTaskPayload: createTask) {
+  static async create(createTaskPayload: IcreateTask) {
     const status: number = StatusCodes.CREATED;
     const message: string = 'Task successfully created!';
     const success: boolean = true;
@@ -24,8 +25,14 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static getById() {
-    return 'getById';
+  static async getById(getSingleTask: IgetSingleTask) {
+    const status: number = StatusCodes.OK;
+    const message: string = 'Single task were retrieved!';
+    const success: boolean = true;
+
+    const result = await taskSchema.findById({ _id: getSingleTask.taskId });
+
+    return { success, status, message, result };
   }
 
   static update() {

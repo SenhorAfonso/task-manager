@@ -1,6 +1,7 @@
 import createTask from '../DTOs/createTask';
 import TaskRepository from '../repositories/taskRepository';
 import TaskUtils from '../utils/taskUtils';
+import getSingleTask from '../DTOs/getSingleTask';
 
 class TaskService {
 
@@ -17,8 +18,8 @@ class TaskService {
     return result;
   }
 
-  static getSingleTask() {
-    const result = TaskRepository.getById();
+  static getSingleTask(getSingleTaskPayload: getSingleTask) {
+    const result = TaskRepository.getById(getSingleTaskPayload);
     return result;
   }
 

@@ -22,12 +22,14 @@ class TaskController {
     res.status(status).json({ success, message, result });
   }
 
-  static getSingleTask (
+  static async getSingleTask (
     req: Request,
     res: Response
   ) {
-    const result = TaskService.getSingleTask();
-    res.send(result);
+    const { id } = req.params;
+
+    const { success, status, message, result } = await TaskService.getSingleTask({ taskId: id });
+    res.status(status).json({ success, message, result });
   }
 
   static updateTask (
