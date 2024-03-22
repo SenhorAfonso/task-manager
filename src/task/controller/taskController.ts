@@ -32,12 +32,15 @@ class TaskController {
     res.status(status).json({ success, message, result });
   }
 
-  static updateTask (
+  static async updateTask (
     req: Request,
     res: Response
   ) {
-    const result = TaskService.updateTask();
-    res.send(result);
+    const { id } = req.params;
+    const newTaskInfo = req.body;
+
+    const { success, status, message, result } = await TaskService.updateTask({ _id: id }, newTaskInfo);
+    res.status(status).json({ success, message, result });
   }
 
   static deleteTask (

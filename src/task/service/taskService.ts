@@ -2,6 +2,8 @@ import createTask from '../DTOs/createTask';
 import TaskRepository from '../repositories/taskRepository';
 import TaskUtils from '../utils/taskUtils';
 import getSingleTask from '../DTOs/getSingleTask';
+import IUpdateTask from '../DTOs/updateTask';
+import ITaskId from '../DTOs/ITaskId';
 
 class TaskService {
 
@@ -23,8 +25,8 @@ class TaskService {
     return result;
   }
 
-  static updateTask() {
-    const result = TaskRepository.update();
+  static updateTask(taskId: ITaskId, newTaskInfo: IUpdateTask) {
+    const result = TaskRepository.update(taskId, newTaskInfo);
     return result;
   }
 

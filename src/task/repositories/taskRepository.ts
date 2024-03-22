@@ -2,6 +2,8 @@ import { StatusCodes } from 'http-status-codes';
 import IcreateTask from '../DTOs/createTask';
 import taskSchema from '../schema/taskSchema';
 import IgetSingleTask from '../DTOs/getSingleTask';
+import ITaskId from '../DTOs/ITaskId';
+import IUpdateTask from '../DTOs/updateTask';
 
 class TaskRepository {
 
@@ -35,8 +37,13 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static update() {
-    return 'update';
+  static async update(taskId: ITaskId, newTaskInfo: IUpdateTask) {
+    const status: number = StatusCodes.OK;
+    const message: string = 'Taks information were updated!';
+    const success: boolean = true;
+
+    const result = await taskSchema.findByIdAndUpdate(taskId, newTaskInfo, { new: true });
+    return { success, status, message, result };
   }
 
   static delete() {
