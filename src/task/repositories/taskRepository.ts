@@ -1,9 +1,11 @@
 import { StatusCodes } from 'http-status-codes';
+import mongoose from 'mongoose';
 import IcreateTask from '../DTOs/createTask';
 import taskSchema from '../schema/taskSchema';
 import IgetSingleTask from '../DTOs/getSingleTask';
 import ITaskId from '../DTOs/ITaskId';
 import IUpdateTask from '../DTOs/updateTask';
+import InternalServerError from '../../errors/internalServerError';
 
 class TaskRepository {
 
@@ -12,7 +14,13 @@ class TaskRepository {
     const message: string = 'Task successfully created!';
     const success: boolean = true;
 
-    const result = await taskSchema.create(createTaskPayload);
+    let result: mongoose.Document | null;
+
+    try {
+      result = await taskSchema.create(createTaskPayload);
+    } catch (error) {
+      throw new InternalServerError();
+    }
 
     return { success, status, message, result };
   }
