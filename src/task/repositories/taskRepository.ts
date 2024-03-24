@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import mongoose from 'mongoose';
+import mongoose, { mongo } from 'mongoose';
 import IcreateTask from '../DTOs/createTask';
 import taskSchema from '../schema/taskSchema';
 import IgetSingleTask from '../DTOs/getSingleTask';
@@ -96,7 +96,22 @@ class TaskRepository {
     const message: string = 'Task were succesfully deleted!';
     const success: boolean = true;
 
-    const result = await taskSchema.findByIdAndDelete(taskId);
+    let result: mongoose.Document | null;
+
+    try {
+      result = await taskSchema.findByIdAndDelete(taskId);
+    } catch (error) {
+      if (error instanceof mongoose.Error.CastError) {
+        throw new BadRequestError();
+      } else {
+        throw new InternalServerError();
+      }
+    }
+
+    if (!result) {
+      throw new NotFoundError(`The id ${taskId._id} is not associated with any element!`);
+    }
+
     return { success, status, message, result };
   }
 
