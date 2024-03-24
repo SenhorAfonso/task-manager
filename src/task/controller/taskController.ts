@@ -28,7 +28,7 @@ class TaskController {
   ) {
     const { id } = req.params;
 
-    const { success, status, message, result } = await TaskService.getSingleTask({ taskId: id });
+    const { success, status, message, result } = await TaskService.getSingleTask({ _id: id });
     res.status(status).json({ success, message, result });
   }
 
