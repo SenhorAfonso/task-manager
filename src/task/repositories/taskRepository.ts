@@ -47,7 +47,7 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static async getById(getSingleTask: IgetSingleTask) {
+  static async getById(taskId: ITaskId) {
     const status: number = StatusCodes.OK;
     const message: string = 'Single task were retrieved!';
     const success: boolean = true;
@@ -55,17 +55,17 @@ class TaskRepository {
     let result: mongoose.Document | null;
 
     try {
-      result = await taskSchema.findById({ _id: getSingleTask.taskId });
+      result = await taskSchema.findById(taskId);
     } catch (error) {
       if (error instanceof mongoose.Error.CastError) {
-        throw new BadRequestError();
+        throw new BadRequestError(`The format of the id ${taskId._id} is invalid!`);
       } else {
         throw new InternalServerError();
       }
     }
 
-    if (result === null) {
-      throw new NotFoundError();
+    if (!result) {
+      throw new NotFoundError(`The id ${taskId._id} is not associated with any element!`);
     }
 
     return { success, status, message, result };
@@ -82,10 +82,14 @@ class TaskRepository {
       result = await taskSchema.findByIdAndUpdate(taskId, newTaskInfo, { new: true });
     } catch (error) {
       if (error instanceof mongoose.Error.CastError) {
-        throw new BadRequestError();
+        throw new BadRequestError(`The format of the id ${taskId._id} is invalid!`);
       } else {
         throw new InternalServerError();
       }
+    }
+
+    if (!result) {
+      throw new NotFoundError(`The id ${taskId._id} is not associated with any element!`);
     }
 
     return { success, status, message, result };
@@ -102,7 +106,7 @@ class TaskRepository {
       result = await taskSchema.findByIdAndDelete(taskId);
     } catch (error) {
       if (error instanceof mongoose.Error.CastError) {
-        throw new BadRequestError();
+        throw new BadRequestError(`The format of the id ${taskId._id} is invalid!`);
       } else {
         throw new InternalServerError();
       }
