@@ -76,7 +76,18 @@ class TaskRepository {
     const message: string = 'Taks information were updated!';
     const success: boolean = true;
 
-    const result = await taskSchema.findByIdAndUpdate(taskId, newTaskInfo, { new: true });
+    let result: mongoose.Document | null;
+
+    try {
+      result = await taskSchema.findByIdAndUpdate(taskId, newTaskInfo, { new: true });
+    } catch (error) {
+      if (error instanceof mongoose.Error.CastError) {
+        throw new BadRequestError();
+      } else {
+        throw new InternalServerError();
+      }
+    }
+
     return { success, status, message, result };
   }
 
