@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+import serverConfig from '../../config/config';
 
 const MIN_USERNAME_LENGHT = 5;
 
@@ -29,6 +31,11 @@ const userSchema = new mongoose.Schema({
     trim: true
   },
 
+});
+
+userSchema.pre('save', async function() {
+  const salt: string = serverConfig.BCRYPT_SALT!;
+  this.password = await bcrypt.hash(this.password!, salt);
 });
 
 export default mongoose.model('userModel', userSchema);
