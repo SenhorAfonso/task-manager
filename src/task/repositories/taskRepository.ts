@@ -7,6 +7,7 @@ import IUpdateTask from '../DTOs/updateTask';
 import InternalServerError from '../../errors/internalServerError';
 import NotFoundError from '../../errors/notFoundError';
 import BadRequestError from '../../errors/badRequestError';
+import TaskUtils from '../utils/taskUtils';
 
 class TaskRepository {
 
@@ -39,7 +40,7 @@ class TaskRepository {
       throw new InternalServerError();
     }
 
-    if (result.length === 0) {
+    if (TaskUtils.isEmpty(result)) {
       throw new NotFoundError();
     }
 
