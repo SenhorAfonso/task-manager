@@ -1,8 +1,9 @@
 import StatusCodes from 'http-status-codes';
-import userSchema from '../schema/userSchema';
 import mongoose from 'mongoose';
+import userSchema from '../schema/userSchema';
 import IRegisterNewUser from '../DTOs/IRegisterNewUser';
 import BadRequestError from '../../errors/badRequestError';
+import UserUtils from '../utils/userUtils';
 
 class UserRepository {
 
@@ -10,7 +11,7 @@ class UserRepository {
     const status: number = StatusCodes.OK;
     const message: string = 'User successfully registered!';
     const success: boolean = true;
-    const { email } = registerUserPayload;
+    const { email, password, confirmPassword } = registerUserPayload;
 
     let result: mongoose.Document | null;
 
@@ -18,6 +19,10 @@ class UserRepository {
 
     if (result) {
       throw new BadRequestError('The email entered is already registered!');
+    }
+
+    if (!UserUtils.passwordsMatch(password, confirmPassword)) {
+      throw new BadRequestError('The passwords do not match');
     }
 
     result = await userSchema.create(registerUserPayload);
