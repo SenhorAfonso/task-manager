@@ -1,8 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import IcreateTask from '../DTOs/createTask';
 import taskSchema from '../schema/taskSchema';
-import IgetSingleTask from '../DTOs/getSingleTask';
 import ITaskId from '../DTOs/ITaskId';
 import IUpdateTask from '../DTOs/updateTask';
 import InternalServerError from '../../errors/internalServerError';

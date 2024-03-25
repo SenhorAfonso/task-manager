@@ -1,7 +1,6 @@
 import createTask from '../DTOs/createTask';
 import TaskRepository from '../repositories/taskRepository';
 import TaskUtils from '../utils/taskUtils';
-import getSingleTask from '../DTOs/getSingleTask';
 import IUpdateTask from '../DTOs/updateTask';
 import ITaskId from '../DTOs/ITaskId';
 
