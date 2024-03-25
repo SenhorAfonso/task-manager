@@ -4,6 +4,9 @@ import userSchema from '../schema/userSchema';
 import IRegisterNewUser from '../DTOs/IRegisterNewUser';
 import BadRequestError from '../../errors/badRequestError';
 import UserUtils from '../utils/userUtils';
+import ILoginUser from '../DTOs/ILoginUser';
+import APIUtils from '../../utils/APIUtils';
+import NotFoundError from '../../errors/notFoundError';
 
 class UserRepository {
 
@@ -30,8 +33,25 @@ class UserRepository {
     return { success, message, status, result };
   }
 
-  static loginUser() {
-    return 'user logged in';
+  static async loginUser(loginUserPayload: ILoginUser) {
+    const status: number = StatusCodes.OK;
+    const message: string = 'User successfully logged in';
+    const success: boolean = true;
+    const { email, password } = loginUserPayload;
+
+    const user = await userSchema.findOne({ email });
+
+    if(APIUtils.isEmpty(user)) {
+      throw new NotFoundError('There is no user with the provided email!');
+    }
+
+    const hashedPassword = user!.password!;
+
+    if (UserUtils.passwordIsIncorrect(password, hashedPassword)) {
+      throw new BadRequestError('The password is incorrect!');
+    }
+
+    return { success, message, status, user };
   }
 
 }

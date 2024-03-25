@@ -13,12 +13,14 @@ class UserController {
     res.status(status).json({ success, message, result });
   }
 
-  static login(
+  static async login(
     req: Request,
     res: Response
   ) {
-    const result = UserService.loginUser();
-    res.send(result);
+    const { email, password } = req.body;
+    const { success, message, status, user, token } = await UserService.loginUser({ email, password });
+
+    res.status(status).json({ success, message, data: { user, token } });;
   }
 
 }
