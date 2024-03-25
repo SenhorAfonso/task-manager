@@ -1,7 +1,7 @@
 import express from 'express';
-import TaskController from './task/controller/taskController';
-import ValidationMiddleware from './middleware/ValidationMiddleware';
-import ValidateTask from './task/validations/validateTask';
+import TaskController from './controller/taskController';
+import ValidationMiddleware from '../middleware/ValidationMiddleware';
+import ValidateTask from './validations/validateTask';
 
 const taskRouter = express.Router();
 
