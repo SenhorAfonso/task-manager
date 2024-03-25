@@ -1,11 +1,15 @@
+import UserRepository from '../repositories/userRepository';
+
 class UserService {
 
   static registerNewUser() {
-    return 'new user registered';
+    const result = UserRepository.registerUser();
+    return result;
   }
 
   static loginUser() {
-    return 'user logged in';
+    const result = UserRepository.loginUser();
+    return result;
   }
 
 }
