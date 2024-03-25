@@ -7,9 +7,9 @@ class UserController {
     req: Request,
     res: Response
   ) {
-    const { username, weight, email, password } = req.body;
+    const { username, weight, email, password, confirmPassword } = req.body;
 
-    const { success, message, status, result } = await UserService.registerNewUser({ username, weight, email, password });
+    const { success, message, status, result } = await UserService.registerNewUser({ username, weight, email, password, confirmPassword });
     res.status(status).json({ success, message, result });
   }
 

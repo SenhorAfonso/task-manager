@@ -1,8 +1,9 @@
+import IRegisterNewUser from '../DTOs/IRegisterNewUser';
 import UserRepository from '../repositories/userRepository';
 
 class UserService {
 
-  static registerNewUser(registerUserPayload: any) {
+  static registerNewUser(registerUserPayload: IRegisterNewUser) {
     const result = UserRepository.registerUser(registerUserPayload);
     return result;
   }
