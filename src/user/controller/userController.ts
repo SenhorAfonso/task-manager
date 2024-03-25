@@ -3,14 +3,14 @@ import UserService from '../service/userService';
 
 class UserController {
 
-  static register(
+  static async register(
     req: Request,
     res: Response
   ) {
     const { username, weight, email, password } = req.body;
 
-    const result = UserService.registerNewUser({ username, weight, email, password });
-    res.send(result);
+    const { success, message, status, result } = await UserService.registerNewUser({ username, weight, email, password });
+    res.status(status).json({ success, message, result });
   }
 
   static login(
