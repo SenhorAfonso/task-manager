@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import UserService from '../service/userService';
 
 class UserController {
 
@@ -6,14 +7,16 @@ class UserController {
     req: Request,
     res: Response
   ) {
-    res.send('register');
+    const result = UserService.registerNewUser();
+    res.send(result);
   }
 
   static login(
     req: Request,
     res: Response
   ) {
-    res.send('login');
+    const result = UserService.loginUser();
+    res.send(result);
   }
 
 }
