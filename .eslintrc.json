@@ -23,6 +23,7 @@
   ],
   "rules": {
     "no-trailing-spaces":"error",
+    "no-param-reassign":"off",
     "padding-line-between-statements":"error",
     "no-multiple-empty-lines":"error",
     "space-in-parens": "warn",
@@ -70,7 +71,30 @@
     {
       "files": ["app.ts", "server.ts"],
       "rules": {
-        "class-methods-use-this":"off"
+        "class-methods-use-this":"off",
+        "no-new": "off",
+        "no-console":"off"
+      }
+    },
+    {
+      "files": ["ErrorHandlingMiddleware.ts"],
+      "rules": {
+        "max-params": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "no-unused-vars":"off"  
+      }
+    },
+    {
+      "files": ["taskRepository.ts"],
+      "rules": {
+        "no-underscore-dangle":"off"
+      }
+    },
+    {
+      "files": ["taskUtils.ts"],
+      "rules": {
+        "no-magic-numbers":"off",
+        "no-undefined":"off"
       }
     }
   ]
