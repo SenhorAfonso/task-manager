@@ -1,13 +1,10 @@
 import express from 'express';
+import UserController from './controller/userController';
 
 const userRouter = express.Router();
 
-userRouter.post('/user/signup', (req, res) => {
-  res.send('Signup');
-});
+userRouter.post('/user/signup', UserController.register);
 
-userRouter.post('/user/login', (req, res) => {
-  res.send('Login');
-});
+userRouter.post('/user/login', UserController.login);
 
 export default userRouter;
