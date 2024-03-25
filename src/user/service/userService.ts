@@ -2,8 +2,8 @@ import UserRepository from '../repositories/userRepository';
 
 class UserService {
 
-  static registerNewUser() {
-    const result = UserRepository.registerUser();
+  static registerNewUser(registerUserPayload: any) {
+    const result = UserRepository.registerUser(registerUserPayload);
     return result;
   }
 

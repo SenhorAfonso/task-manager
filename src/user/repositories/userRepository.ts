@@ -1,7 +1,10 @@
+import userSchema from '../schema/userSchema';
+
 class UserRepository {
 
-  static registerUser() {
-    return 'user registered';
+  static async registerUser(registerUserPayload: any) {
+    const result = await userSchema.create(registerUserPayload);
+    return result;
   }
 
   static loginUser() {

@@ -7,7 +7,9 @@ class UserController {
     req: Request,
     res: Response
   ) {
-    const result = UserService.registerNewUser();
+    const { username, weight, email, password } = req.body;
+
+    const result = UserService.registerNewUser({ username, weight, email, password });
     res.send(result);
   }
 
