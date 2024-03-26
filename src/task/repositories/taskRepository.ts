@@ -8,6 +8,7 @@ import InternalServerError from '../../errors/internalServerError';
 import NotFoundError from '../../errors/notFoundError';
 import BadRequestError from '../../errors/badRequestError';
 import APIUtils from '../../utils/APIUtils';
+import userID from '../DTOs/userID';
 
 class TaskRepository {
 
@@ -27,7 +28,7 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static async getAll() {
+  static async getAll(userID: userID) {
     const status: number = StatusCodes.OK;
     const message: string = 'All task were retrieved';
     const success: boolean = true;
@@ -35,7 +36,7 @@ class TaskRepository {
     let result: mongoose.Document[] | null;
 
     try {
-      result = await taskSchema.find();
+      result = await taskSchema.find(userID);
     } catch (error) {
       throw new InternalServerError();
     }
