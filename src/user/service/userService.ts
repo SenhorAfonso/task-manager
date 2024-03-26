@@ -13,7 +13,7 @@ class UserService {
 
   static async loginUser(loginUser: ILoginUser) {
     const { success, message, status, user } = await UserRepository.loginUser(loginUser);
-    const userID = user!._id;
+    const userID = user!.id;
     const token = jwt.sign({ userID }, serverConfig.JWT_SECRETE_KEY!);
 
     return { success, message, status, user, token };
