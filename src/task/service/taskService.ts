@@ -3,6 +3,7 @@ import TaskRepository from '../repositories/taskRepository';
 import TaskUtils from '../utils/taskUtils';
 import IUpdateTask from '../DTOs/updateTask';
 import ITaskId from '../DTOs/ITaskId';
+import userID from '../DTOs/userID';
 
 class TaskService {
 
@@ -14,8 +15,8 @@ class TaskService {
     return result;
   }
 
-  static getAllTasks() {
-    const result = TaskRepository.getAll();
+  static getAllTasks(userID: userID) {
+    const result = TaskRepository.getAll(userID);
     return result;
   }
 

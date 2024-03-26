@@ -19,7 +19,8 @@ class TaskController {
     req: AuthenticatedRequest,
     res: Response
   ) {
-    const { success, status, message, result } = await TaskService.getAllTasks();
+    const { userID } = req.user!;
+    const { success, status, message, result } = await TaskService.getAllTasks({ userID });
 
     res.status(status).json({ success, message, result });
   }
