@@ -1,20 +1,22 @@
-import { Response, Request } from 'express';
+import { Response } from 'express';
 import TaskService from '../service/taskService';
+import AuthenticatedRequest from '../../interface/AuthenticatedRequest';
 
 class TaskController {
 
   static async CreateTask (
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
     const { title, description, type, category } = req.body;
-    const { success, status, message, result } = await TaskService.createTask({ title, description, type, category });
+    const { userID } = req.user!;
+    const { success, status, message, result } = await TaskService.createTask({ userID, title, description, type, category });
 
     res.status(status).json({ success, message, result });
   }
 
   static async getTasks (
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
     const { success, status, message, result } = await TaskService.getAllTasks();
@@ -23,7 +25,7 @@ class TaskController {
   }
 
   static async getSingleTask (
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
     const { id } = req.params;
@@ -33,7 +35,7 @@ class TaskController {
   }
 
   static async updateTask (
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
     const { id } = req.params;
@@ -44,7 +46,7 @@ class TaskController {
   }
 
   static async deleteTask (
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
     const { id } = req.params;

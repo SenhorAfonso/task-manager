@@ -1,9 +1,9 @@
 import { Request } from 'express';
 
-interface AuthenticateRequest extends Request {
+interface AuthenticatedRequest extends Request {
   user?: {
-    userID: string | undefined
+    userID: string
   };
 };
 
-export default AuthenticateRequest;
+export default AuthenticatedRequest;
