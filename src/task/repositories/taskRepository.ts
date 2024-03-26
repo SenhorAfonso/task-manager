@@ -9,6 +9,7 @@ import NotFoundError from '../../errors/notFoundError';
 import BadRequestError from '../../errors/badRequestError';
 import APIUtils from '../../utils/APIUtils';
 import userID from '../DTOs/userID';
+import taskDocument from '../DTOs/taskDocument';
 
 class TaskRepository {
 
@@ -48,12 +49,12 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static async getById(taskId: ITaskId) {
+  static async getById(taskId: ITaskId, userID: string) {
     const status: number = StatusCodes.OK;
     const message: string = 'Single task were retrieved!';
     const success: boolean = true;
 
-    let result: mongoose.Document | null;
+    let result: taskDocument | null;
 
     try {
       result = await taskSchema.findById(taskId);
@@ -67,6 +68,10 @@ class TaskRepository {
 
     if (!result) {
       throw new NotFoundError(`The id ${taskId._id} is not associated with any element!`);
+    }
+
+    if (result.userID !== userID) {
+      throw new Error('Unauthorized access!');
     }
 
     return { success, status, message, result };

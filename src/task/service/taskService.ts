@@ -20,8 +20,8 @@ class TaskService {
     return result;
   }
 
-  static getSingleTask(taskId: ITaskId) {
-    const result = TaskRepository.getById(taskId);
+  static getSingleTask(taskId: ITaskId, userID: string) {
+    const result = TaskRepository.getById(taskId, userID);
     return result;
   }
 
