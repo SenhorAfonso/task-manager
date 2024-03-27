@@ -1,23 +1,30 @@
+import CategoryRepository from '../repositories/categoryRepository';
+
 class CategoryService {
 
-  static createCategory() {
-    return 'New category created!';
+  static async createCategory() {
+    const result = await CategoryRepository.createCategory();
+    return result;
   }
 
-  static getAllCategory() {
-    return 'All categories retrieved';
+  static async getAllCategory() {
+    const result = await CategoryRepository.getAllCategory();
+    return result;
   }
 
-  static getSingleCategory() {
-    return 'Single category retrieved';
+  static async getSingleCategory() {
+    const result = await CategoryRepository.getSingleCategory();
+    return result;
   }
 
-  static updatecategory() {
-    return 'Category updated';
+  static async updatecategory() {
+    const result = await CategoryRepository.updatecategory();
+    return result;
   }
 
-  static deleteCategory() {
-    return 'Category deleted';
+  static async deleteCategory() {
+    const result = await CategoryRepository.deleteCategory();
+    return result;
   }
 
 }
