@@ -45,8 +45,14 @@ class CategoryRepository {
     return { status, success, message, result };
   }
 
-  static deleteCategory() {
-    return 'Category deleted';
+  static async deleteCategory(categoryID: string) {
+    const status: number = StatusCodes.OK;
+    const success: boolean = true;
+    const message: string = 'Category deleted successfully!';
+
+    const result = await categorySchema.findByIdAndDelete({ _id: categoryID });
+
+    return { status, success, message, result };
   }
 }
 

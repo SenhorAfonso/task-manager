@@ -24,8 +24,8 @@ class CategoryService {
     return result;
   }
 
-  static async deleteCategory() {
-    const result = await CategoryRepository.deleteCategory();
+  static async deleteCategory(categoryID: string) {
+    const result = await CategoryRepository.deleteCategory(categoryID);
     return result;
   }
 

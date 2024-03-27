@@ -44,8 +44,10 @@ class CategoryController {
     req: Request,
     res: Response
   ) {
-    const result = await CategoryService.deleteCategory();
-    res.send(result);
+    const { id } = req.params;
+    const { status, success, message, result } = await CategoryService.deleteCategory(id);
+
+    res.status(status).json({ success, message, result });
   }
 
 }
