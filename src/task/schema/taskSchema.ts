@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import userSchema from '../../user/schema/userSchema';
 
 const MIN_TITLE_LENGHT: number = 5;
 const MIN_DESC_LENGHT: number = 5;
@@ -33,8 +34,9 @@ const taskSchema = new mongoose.Schema({
     enum: ['pending', 'in-progress', 'finished'],
     require: ['The status of the task is required!']
   },
-  owner: {
-    type: String
+  userID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'userModel'
   }
 });
 

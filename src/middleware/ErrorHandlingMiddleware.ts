@@ -16,7 +16,7 @@ class ErrorHandlingMiddleware {
 
       res.status(status).json({ error: name, message, status, success });
     } else {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.name, msg: error.message });
     }
   }
 

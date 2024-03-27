@@ -1,4 +1,5 @@
 interface IcreateTask {
+  userID: string
   title: string,
   description: string,
   date_creation?: Date,
@@ -6,7 +7,6 @@ interface IcreateTask {
   type: string,
   category: string,
   status?: string,
-  userId?: string
 }
 
 export default IcreateTask;
