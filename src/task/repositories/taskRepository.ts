@@ -10,6 +10,7 @@ import BadRequestError from '../../errors/badRequestError';
 import APIUtils from '../../utils/APIUtils';
 import userID from '../DTOs/userID';
 import taskDocument from '../DTOs/taskDocument';
+import categorySchema from '../../category/schema/categorySchema';
 
 class TaskRepository {
 
@@ -17,8 +18,23 @@ class TaskRepository {
     const status: number = StatusCodes.CREATED;
     const message: string = 'Task successfully created!';
     const success: boolean = true;
+    const { category } = createTaskPayload;
 
     let result: mongoose.Document | null;
+    let categoryDoc: mongoose.Document | null;
+
+    try {
+      categoryDoc = await categorySchema.findOne({ name: category });
+    } catch (error) {
+      throw new InternalServerError();
+    }
+
+    if (!categoryDoc) {
+      throw new NotFoundError('The category do not exist!');
+    }
+
+    const categoryID = categoryDoc.id;
+    createTaskPayload.category = categoryID;
 
     try {
       result = await taskSchema.create(createTaskPayload);
