@@ -1,23 +1,46 @@
+import { Request, Response } from 'express';
+import CategoryService from '../service/categoryService';
+
 class CategoryController {
 
-  static createCategory() {
-    return 'New category created!';
+  static async createCategory(
+    req: Request,
+    res: Response
+  ) {
+    const result = await CategoryService.createCategory();
+    res.send(result);
   }
 
-  static getAllCategory() {
-    return 'All categories retrieved';
+  static async getAllCategory(
+    req: Request,
+    res: Response
+  ) {
+    const result = await CategoryService.getAllCategory();
+    res.send(result);
   }
 
-  static getSingleCategory() {
-    return 'Single category retrieved';
+  static async getSingleCategory(
+    req: Request,
+    res: Response
+  ) {
+    const result = await CategoryService.getSingleCategory();
+    res.send(result);
   }
 
-  static updatecategory() {
-    return 'Category updated';
+  static async updatecategory(
+    req: Request,
+    res: Response
+  ) {
+    const result = await CategoryService.updatecategory();
+    res.send(result);
   }
 
-  static deleteCategory() {
-    return 'Category deleted';
+  static async deleteCategory(
+    req: Request,
+    res: Response
+  ) {
+    const result = await CategoryService.deleteCategory();
+    res.send(result);
   }
 
 }
