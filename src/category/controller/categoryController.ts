@@ -8,8 +8,8 @@ class CategoryController {
     res: Response
   ) {
     const { name, color } = req.body;
-    const result = await CategoryService.createCategory({ name, color });
-    res.send(result);
+    const { status, success, message, result } = await CategoryService.createCategory({ name, color });
+    res.status(status).json({ success, message, result });
   }
 
   static async getAllCategory(
@@ -36,8 +36,8 @@ class CategoryController {
     const { id } = req.params;
     const { name, color } = req.body;
 
-    const result = await CategoryService.updatecategory(id, { name, color });
-    res.send(result);
+    const { status, success, message, result } = await CategoryService.updatecategory(id, { name, color });
+    res.status(status).json({ success, message, result });
   }
 
   static async deleteCategory(
