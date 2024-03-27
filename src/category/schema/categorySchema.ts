@@ -12,6 +12,10 @@ const categorySchema = new mongoose.Schema({
     type: String,
     enum: ['Green', 'Yellow', 'Orange', 'Red', 'Pink', 'Purple', 'Gray', 'Cyan', 'Blue'],
     require: [true, 'Color is a required field!']
+  },
+  userID: {
+    type: mongoose.Types.ObjectId,
+    ref: 'userModel'
   }
 });
 
