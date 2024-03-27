@@ -1,7 +1,17 @@
+import { StatusCodes } from 'http-status-codes';
+import categorySchema from '../schema/categorySchema';
+import ICreateCategory from '../DTOs/ICreateCategory';
+
 class CategoryRepository {
 
-  static createCategory() {
-    return 'New category created!';
+  static async createCategory(createCategoryPayload: ICreateCategory) {
+    const status: number = StatusCodes.OK;
+    const success: boolean = true;
+    const message: string = 'Category sucessfully created!';
+
+    const result = await categorySchema.create(createCategoryPayload);
+
+    return { status, success, message, result };
   }
 
   static getAllCategory() {

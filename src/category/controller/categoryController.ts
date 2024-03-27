@@ -7,7 +7,8 @@ class CategoryController {
     req: Request,
     res: Response
   ) {
-    const result = await CategoryService.createCategory();
+    const { name, color } = req.body;
+    const result = await CategoryService.createCategory({ name, color });
     res.send(result);
   }
 

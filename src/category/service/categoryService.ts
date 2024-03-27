@@ -1,9 +1,10 @@
+import ICreateCategory from '../DTOs/ICreateCategory';
 import CategoryRepository from '../repositories/categoryRepository';
 
 class CategoryService {
 
-  static async createCategory() {
-    const result = await CategoryRepository.createCategory();
+  static async createCategory(createCategoryPayload: ICreateCategory) {
+    const result = await CategoryRepository.createCategory(createCategoryPayload);
     return result;
   }
 
