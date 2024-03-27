@@ -13,8 +13,8 @@ class CategoryService {
     return result;
   }
 
-  static async getSingleCategory() {
-    const result = await CategoryRepository.getSingleCategory();
+  static async getSingleCategory(categoryID: string) {
+    const result = await CategoryRepository.getSingleCategory(categoryID);
     return result;
   }
 

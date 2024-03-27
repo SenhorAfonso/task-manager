@@ -17,15 +17,21 @@ class CategoryRepository {
   static async getAllCategory() {
     const status: number = StatusCodes.OK;
     const success: boolean = true;
-    const message: string = "All user's categories retrieved";
+    const message: string = "All user's categories retrieved successfully!";
 
     const result = await categorySchema.find();
 
     return { status, success, message, result };
   }
 
-  static getSingleCategory() {
-    return 'Single category retrieved';
+  static async getSingleCategory(categoryID: string) {
+    const status: number = StatusCodes.OK;
+    const success: boolean = true;
+    const message: string = 'Category retrieved successfully!';
+
+    const result = await categorySchema.findById({ _id: categoryID });
+
+    return { status, success, message, result };
   }
 
   static updatecategory() {
