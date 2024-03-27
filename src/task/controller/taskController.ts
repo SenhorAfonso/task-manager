@@ -1,55 +1,61 @@
-import { Response, Request } from 'express';
+import { Response } from 'express';
 import TaskService from '../service/taskService';
+import AuthenticatedRequest from '../../interface/AuthenticatedRequest';
 
 class TaskController {
 
   static async CreateTask (
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
     const { title, description, type, category } = req.body;
-    const { success, status, message, result } = await TaskService.createTask({ title, description, type, category });
+    const { userID } = req.user!;
+    const { success, status, message, result } = await TaskService.createTask({ userID, title, description, type, category });
 
     res.status(status).json({ success, message, result });
   }
 
   static async getTasks (
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
-    const { success, status, message, result } = await TaskService.getAllTasks();
+    const { userID } = req.user!;
+    const { success, status, message, result } = await TaskService.getAllTasks({ userID });
 
     res.status(status).json({ success, message, result });
   }
 
   static async getSingleTask (
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
     const { id } = req.params;
+    const { userID } = req.user!;
 
-    const { success, status, message, result } = await TaskService.getSingleTask({ _id: id });
+    const { success, status, message, result } = await TaskService.getSingleTask({ _id: id }, userID);
     res.status(status).json({ success, message, result });
   }
 
   static async updateTask (
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
     const { id } = req.params;
     const newTaskInfo = req.body;
+    const { userID } = req.user!;
 
-    const { success, status, message, result } = await TaskService.updateTask({ _id: id }, newTaskInfo);
+    const { success, status, message, result } = await TaskService.updateTask({ _id: id }, newTaskInfo, userID);
     res.status(status).json({ success, message, result });
   }
 
   static async deleteTask (
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
     const { id } = req.params;
+    const { userID } = req.user!;
 
-    const { success, status, message, result } = await TaskService.deleteTask({ _id: id });
+    const { success, status, message, result } = await TaskService.deleteTask({ _id: id }, userID);
     res.status(status).json({ success, message, 'deleted task': result });
   }
 

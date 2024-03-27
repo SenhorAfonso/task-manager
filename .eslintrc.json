@@ -91,10 +91,26 @@
       }
     },
     {
-      "files": ["taskUtils.ts"],
+      "files": ["taskUtils.ts", "APIUtils.ts"],
       "rules": {
         "no-magic-numbers":"off",
         "no-undefined":"off"
+      }
+    },
+    {
+      "files": ["userSchema.ts"],
+      "rules": {
+        "no-magic-numbers": "off",
+        "prefer-named-capture-group": "off",
+        "require-unicode-regexp": "off",
+        "func-names":"off",
+        "no-invalid-this":"off"
+      }
+    },
+    {
+      "files": ["userService.ts"],
+      "rules": {
+        "no-underscore-dangle":"off"
       }
     }
   ]

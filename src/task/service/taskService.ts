@@ -3,6 +3,7 @@ import TaskRepository from '../repositories/taskRepository';
 import TaskUtils from '../utils/taskUtils';
 import IUpdateTask from '../DTOs/updateTask';
 import ITaskId from '../DTOs/ITaskId';
+import userID from '../DTOs/userID';
 
 class TaskService {
 
@@ -14,23 +15,23 @@ class TaskService {
     return result;
   }
 
-  static getAllTasks() {
-    const result = TaskRepository.getAll();
+  static getAllTasks(userID: userID) {
+    const result = TaskRepository.getAll(userID);
     return result;
   }
 
-  static getSingleTask(taskId: ITaskId) {
-    const result = TaskRepository.getById(taskId);
+  static getSingleTask(taskId: ITaskId, userID: string) {
+    const result = TaskRepository.getById(taskId, userID);
     return result;
   }
 
-  static updateTask(taskId: ITaskId, newTaskInfo: IUpdateTask) {
-    const result = TaskRepository.update(taskId, newTaskInfo);
+  static updateTask(taskId: ITaskId, newTaskInfo: IUpdateTask, userID: string) {
+    const result = TaskRepository.update(taskId, newTaskInfo, userID);
     return result;
   }
 
-  static deleteTask(taskId: ITaskId) {
-    const result = TaskRepository.delete(taskId);
+  static deleteTask(taskId: ITaskId, userID: string) {
+    const result = TaskRepository.delete(taskId, userID);
     return result;
   }
 
