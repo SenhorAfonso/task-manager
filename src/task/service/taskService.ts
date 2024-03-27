@@ -25,8 +25,8 @@ class TaskService {
     return result;
   }
 
-  static updateTask(taskId: ITaskId, newTaskInfo: IUpdateTask) {
-    const result = TaskRepository.update(taskId, newTaskInfo);
+  static updateTask(taskId: ITaskId, newTaskInfo: IUpdateTask, userID: string) {
+    const result = TaskRepository.update(taskId, newTaskInfo, userID);
     return result;
   }
 

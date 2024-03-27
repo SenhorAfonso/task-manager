@@ -42,8 +42,9 @@ class TaskController {
   ) {
     const { id } = req.params;
     const newTaskInfo = req.body;
+    const { userID } = req.user!;
 
-    const { success, status, message, result } = await TaskService.updateTask({ _id: id }, newTaskInfo);
+    const { success, status, message, result } = await TaskService.updateTask({ _id: id }, newTaskInfo, userID);
     res.status(status).json({ success, message, result });
   }
 
