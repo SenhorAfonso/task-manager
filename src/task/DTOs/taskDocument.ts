@@ -1,4 +1,4 @@
-import Document from 'mongoose';
+import { Document } from 'mongoose';
 
 interface taskDocument extends Document {
   userID: string;
