@@ -107,15 +107,15 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static async delete(taskId: ITaskId) {
+  static async delete(taskId: ITaskId, userID: string) {
     const status: number = StatusCodes.OK;
     const message: string = 'Task were succesfully deleted!';
     const success: boolean = true;
 
-    let result: mongoose.Document | null;
+    let result: taskDocument | null;
 
     try {
-      result = await taskSchema.findByIdAndDelete(taskId);
+      result = await taskSchema.findById(taskId);
     } catch (error) {
       if (error instanceof mongoose.Error.CastError) {
         throw new BadRequestError(`The format of the id ${taskId._id} is invalid!`);
@@ -127,6 +127,12 @@ class TaskRepository {
     if (!result) {
       throw new NotFoundError(`The id ${taskId._id} is not associated with any element!`);
     }
+
+    if (result.userID.toString() !== userID) {
+      throw new Error('Unauthorized access!');
+    }
+
+    await taskSchema.findByIdAndDelete(taskId);
 
     return { success, status, message, result };
   }

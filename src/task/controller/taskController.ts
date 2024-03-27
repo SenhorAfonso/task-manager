@@ -53,8 +53,9 @@ class TaskController {
     res: Response
   ) {
     const { id } = req.params;
+    const { userID } = req.user!;
 
-    const { success, status, message, result } = await TaskService.deleteTask({ _id: id });
+    const { success, status, message, result } = await TaskService.deleteTask({ _id: id }, userID);
     res.status(status).json({ success, message, 'deleted task': result });
   }
 

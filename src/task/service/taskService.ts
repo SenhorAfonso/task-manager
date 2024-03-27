@@ -30,8 +30,8 @@ class TaskService {
     return result;
   }
 
-  static deleteTask(taskId: ITaskId) {
-    const result = TaskRepository.delete(taskId);
+  static deleteTask(taskId: ITaskId, userID: string) {
+    const result = TaskRepository.delete(taskId, userID);
     return result;
   }
 
