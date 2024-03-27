@@ -1,19 +1,22 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import CategoryService from '../service/categoryService';
+import AuthenticatedRequest from '../../interface/AuthenticatedRequest';
 
 class CategoryController {
 
   static async createCategory(
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
     const { name, color } = req.body;
-    const { status, success, message, result } = await CategoryService.createCategory({ name, color });
+    const { userID } = req.user!;
+
+    const { status, success, message, result } = await CategoryService.createCategory({ userID, name, color });
     res.status(status).json({ success, message, result });
   }
 
   static async getAllCategory(
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
     const { status, success, message, result } = await CategoryService.getAllCategory();
@@ -21,7 +24,7 @@ class CategoryController {
   }
 
   static async getSingleCategory(
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
     const { id } = req.params;
@@ -30,7 +33,7 @@ class CategoryController {
   }
 
   static async updatecategory(
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
     const { id } = req.params;
@@ -41,7 +44,7 @@ class CategoryController {
   }
 
   static async deleteCategory(
-    req: Request,
+    req: AuthenticatedRequest,
     res: Response
   ) {
     const { id } = req.params;
