@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import categorySchema from '../schema/categorySchema';
 import ICreateCategory from '../DTOs/ICreateCategory';
+import IUpdateCategory from '../DTOs/IUpdateCategory';
 
 class CategoryRepository {
 
@@ -34,8 +35,14 @@ class CategoryRepository {
     return { status, success, message, result };
   }
 
-  static updatecategory() {
-    return 'Category updated';
+  static async updatecategory(categoryID: string, newCategoryInfo: IUpdateCategory) {
+    const status: number = StatusCodes.OK;
+    const success: boolean = true;
+    const message: string = 'Category updated successfully!';
+
+    const result = await categorySchema.findByIdAndUpdate({ _id: categoryID }, newCategoryInfo, { new: true });
+
+    return { status, success, message, result };
   }
 
   static deleteCategory() {

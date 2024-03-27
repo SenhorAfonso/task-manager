@@ -1,4 +1,5 @@
 import ICreateCategory from '../DTOs/ICreateCategory';
+import IUpdateCategory from '../DTOs/IUpdateCategory';
 import CategoryRepository from '../repositories/categoryRepository';
 
 class CategoryService {
@@ -18,8 +19,8 @@ class CategoryService {
     return result;
   }
 
-  static async updatecategory() {
-    const result = await CategoryRepository.updatecategory();
+  static async updatecategory(categoryID: string, newCategoryInfo: IUpdateCategory) {
+    const result = await CategoryRepository.updatecategory(categoryID, newCategoryInfo);
     return result;
   }
 

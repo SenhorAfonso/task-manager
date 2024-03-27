@@ -33,7 +33,10 @@ class CategoryController {
     req: Request,
     res: Response
   ) {
-    const result = await CategoryService.updatecategory();
+    const { id } = req.params;
+    const { name, color } = req.body;
+
+    const result = await CategoryService.updatecategory(id, { name, color });
     res.send(result);
   }
 
