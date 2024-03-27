@@ -16,8 +16,8 @@ class CategoryController {
     req: Request,
     res: Response
   ) {
-    const result = await CategoryService.getAllCategory();
-    res.send(result);
+    const { status, success, message, result } = await CategoryService.getAllCategory();
+    res.status(status).json({ success, message, result });
   }
 
   static async getSingleCategory(

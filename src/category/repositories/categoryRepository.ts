@@ -14,8 +14,14 @@ class CategoryRepository {
     return { status, success, message, result };
   }
 
-  static getAllCategory() {
-    return 'All categories retrieved';
+  static async getAllCategory() {
+    const status: number = StatusCodes.OK;
+    const success: boolean = true;
+    const message: string = "All user's categories retrieved";
+
+    const result = await categorySchema.find();
+
+    return { status, success, message, result };
   }
 
   static getSingleCategory() {
