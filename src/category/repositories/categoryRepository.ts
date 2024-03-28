@@ -23,7 +23,12 @@ class CategoryRepository {
 
     let result: mongoose.Document | null;
 
-    result = await categorySchema.findOne({ userID, name });
+    try {
+      result = await categorySchema.findOne({ userID, name });
+    } catch (error) {
+      throw new InternalServerError('An unknown error ocurred during duplicated category name verification. Please try again later.');
+    }
+
     if (!APIUtils.isEmpty(result)) {
       throw new DuplicatedContentError('The category already exist!');
     }
@@ -110,7 +115,11 @@ class CategoryRepository {
       throw new UnauthorizedAccessError('You do not have permissions to update this category!');
     }
 
-    await categorySchema.findByIdAndUpdate({ _id: categoryID }, newCategoryInfo, { new: true });
+    try {
+      result = await categorySchema.findByIdAndUpdate({ _id: categoryID }, newCategoryInfo, { new: true });
+    } catch (error) {
+      throw new InternalServerError('An unknown error ocurred during category update. Please try again later.');
+    }
 
     return { status, success, message, result };
   }
@@ -140,7 +149,11 @@ class CategoryRepository {
       throw new UnauthorizedAccessError('You do not have permissions to delete this category!');
     }
 
-    result = await categorySchema.findByIdAndDelete({ _id: categoryID });
+    try {
+      result = await categorySchema.findByIdAndDelete({ _id: categoryID });
+    } catch (error) {
+      throw new InternalServerError('An unknown error ocurred during category delete. Please try again later.');
+    }
 
     return { status, success, message, result };
   }
