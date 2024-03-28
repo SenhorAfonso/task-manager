@@ -119,7 +119,11 @@ class TaskRepository {
       throw new UnauthorizedAccessError('You do not have permissions to update this task!');
     }
 
-    result = await taskSchema.findByIdAndUpdate(taskId, newTaskInfo, { new: true });
+    try {
+      result = await taskSchema.findByIdAndUpdate(taskId, newTaskInfo, { new: true });
+    } catch (error) {
+      throw new InternalServerError('A unknown error ocurred during task update. Please try again later');
+    }
 
     return { success, status, message, result };
   }
@@ -149,7 +153,11 @@ class TaskRepository {
       throw new UnauthorizedAccessError('You do not have permissions to delete this task!');
     }
 
-    await taskSchema.findByIdAndDelete(taskId);
+    try {
+      await taskSchema.findByIdAndDelete(taskId);
+    } catch (error) {
+      throw new InternalServerError('A unknown error ocurred during task delete. Please try again later');
+    }
 
     return { success, status, message, result };
   }
