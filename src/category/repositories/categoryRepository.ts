@@ -10,6 +10,8 @@ import BadRequestError from '../../errors/badRequestError';
 import IAuthenticatedDocument from '../../interface/IAuthenticatedDocument';
 import DuplicatedContentError from '../../errors/duplicatedContentError';
 import UnauthorizedAccessError from '../../errors/unauthorizedAccessError';
+import type Nullable from '../../types/nullable';
+import type mongoDocument from '../../types/mongoDocument';
 
 class CategoryRepository {
 
@@ -21,7 +23,7 @@ class CategoryRepository {
     const { userID } = createCategoryPayload;
     const { name } = createCategoryPayload;
 
-    let result: mongoose.Document | null;
+    let result: Nullable<mongoDocument>;
 
     try {
       result = await categorySchema.findOne({ userID, name });
@@ -47,7 +49,7 @@ class CategoryRepository {
     const success: boolean = true;
     const message: string = "All user's categories retrieved successfully!";
 
-    let result: mongoose.Document[] | null;
+    let result: Nullable<mongoDocument[]>;
 
     try {
       result = await categorySchema.find({ userID });
@@ -67,7 +69,7 @@ class CategoryRepository {
     const success: boolean = true;
     const message: string = 'Category retrieved successfully!';
 
-    let result: IAuthenticatedDocument | null;
+    let result: Nullable<IAuthenticatedDocument>;
 
     try {
       result = await categorySchema.findById({ _id: categoryID });
@@ -95,7 +97,7 @@ class CategoryRepository {
     const success: boolean = true;
     const message: string = 'Category updated successfully!';
 
-    let result: IAuthenticatedDocument | null;
+    let result: Nullable<IAuthenticatedDocument>;
 
     try {
       result = await categorySchema.findById({ _id: categoryID });
@@ -129,7 +131,7 @@ class CategoryRepository {
     const success: boolean = true;
     const message: string = 'Category deleted successfully!';
 
-    let result: IAuthenticatedDocument | null;
+    let result: Nullable<IAuthenticatedDocument>;
 
     try {
       result = await categorySchema.findById({ _id: categoryID });
