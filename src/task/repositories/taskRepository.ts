@@ -11,6 +11,7 @@ import APIUtils from '../../utils/APIUtils';
 import userID from '../DTOs/userID';
 import IAuthenticatedDocument from '../../interface/IAuthenticatedDocument';
 import categorySchema from '../../category/schema/categorySchema';
+import UnauthorizedAccessError from '../../errors/unauthorizedAccessError';
 
 class TaskRepository {
 
@@ -87,7 +88,7 @@ class TaskRepository {
     }
 
     if (result.userID !== userID) {
-      throw new Error('Unauthorized access!');
+      throw new UnauthorizedAccessError('You do not have permissions to access this task!');
     }
 
     return { success, status, message, result };
@@ -114,8 +115,8 @@ class TaskRepository {
       throw new NotFoundError(`The id ${taskId._id} is not associated with any element!`);
     }
 
-    if (result.userID.toString() !== userID) {
-      throw new Error('Unauthorized access!');
+    if (APIUtils.userDontOwn(userID, result)) {
+      throw new UnauthorizedAccessError('You do not have permissions to update this task!');
     }
 
     result = await taskSchema.findByIdAndUpdate(taskId, newTaskInfo, { new: true });
@@ -144,8 +145,8 @@ class TaskRepository {
       throw new NotFoundError(`The id ${taskId._id} is not associated with any element!`);
     }
 
-    if (result.userID.toString() !== userID) {
-      throw new Error('Unauthorized access!');
+    if (APIUtils.userDontOwn(userID, result)) {
+      throw new UnauthorizedAccessError('You do not have permissions to delete this task!');
     }
 
     await taskSchema.findByIdAndDelete(taskId);
