@@ -8,6 +8,8 @@ import ILoginUser from '../DTOs/ILoginUser';
 import APIUtils from '../../utils/APIUtils';
 import NotFoundError from '../../errors/notFoundError';
 import DuplicatedContentError from '../../errors/duplicatedContentError';
+import InternalServerError from '../../errors/internalServerError';
+import IUserDocument from '../enums/IUserDocument';
 
 class UserRepository {
 
@@ -19,7 +21,11 @@ class UserRepository {
 
     let result: mongoose.Document | null;
 
-    result = await userSchema.findOne({ email });
+    try {
+      result = await userSchema.findOne({ email });
+    } catch (error) {
+      throw new InternalServerError('A unknown error ocurred during searching for duplicated user email. Please try again later');
+    }
 
     if (result) {
       throw new DuplicatedContentError('The email entered is already registered!');
@@ -29,7 +35,11 @@ class UserRepository {
       throw new BadRequestError('The passwords do not match!');
     }
 
-    result = await userSchema.create(registerUserPayload);
+    try {
+      result = await userSchema.create(registerUserPayload);
+    } catch (error) {
+      throw new InternalServerError('A unknown error ocurred during user registration. Please try again later');
+    }
 
     return { success, message, status, result };
   }
@@ -40,7 +50,13 @@ class UserRepository {
     const success: boolean = true;
     const { email, password } = loginUserPayload;
 
-    const user = await userSchema.findOne({ email });
+    let user: IUserDocument | null;
+
+    try {
+      user = await userSchema.findOne({ email });
+    } catch (error) {
+      throw new InternalServerError('A unknown error ocurred during searching user email. Please try again later');
+    }
 
     if(APIUtils.isEmpty(user)) {
       throw new NotFoundError('There is no user with the provided email!');
