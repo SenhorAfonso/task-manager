@@ -100,8 +100,23 @@ class TaskRepository {
     const status: number = StatusCodes.OK;
     const message: string = 'Taks information were updated!';
     const success: boolean = true;
+    const { category } = newTaskInfo;
 
     let result: nullable<IAuthenticatedDocument>;
+    let categoryDoc: nullable<mongoDocument>;
+
+    try {
+      categoryDoc = await categorySchema.findOne({ name: category });
+    } catch (error) {
+      throw new InternalServerError();
+    }
+
+    if (APIUtils.isEmpty(categoryDoc)) {
+      throw new NotFoundError(`The category ${newTaskInfo.category} is not registered!`);
+    }
+
+    const categoryID = categoryDoc!.id;
+    newTaskInfo.category = categoryID;
 
     try {
       result = await taskSchema.findOne(taskId);
