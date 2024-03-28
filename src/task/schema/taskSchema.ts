@@ -25,7 +25,7 @@ const taskSchema = new mongoose.Schema({
   type: {
     type: String
   },
-  category: {
+  categoryID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'categoryModel'
   },
