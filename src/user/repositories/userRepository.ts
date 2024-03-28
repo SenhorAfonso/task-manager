@@ -7,6 +7,7 @@ import UserUtils from '../utils/userUtils';
 import ILoginUser from '../DTOs/ILoginUser';
 import APIUtils from '../../utils/APIUtils';
 import NotFoundError from '../../errors/notFoundError';
+import DuplicatedContentError from '../../errors/duplicatedContentError';
 
 class UserRepository {
 
@@ -21,11 +22,11 @@ class UserRepository {
     result = await userSchema.findOne({ email });
 
     if (result) {
-      throw new BadRequestError('The email entered is already registered!');
+      throw new DuplicatedContentError('The email entered is already registered!');
     }
 
     if (!UserUtils.passwordsMatch(password, confirmPassword)) {
-      throw new BadRequestError('The passwords do not match');
+      throw new BadRequestError('The passwords do not match!');
     }
 
     result = await userSchema.create(registerUserPayload);
