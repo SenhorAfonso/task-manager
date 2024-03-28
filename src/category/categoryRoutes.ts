@@ -20,12 +20,12 @@ categoryRoute.get('/category/:id', [
 ], CategoryController.getSingleCategory);
 
 categoryRoute.put('/category/:id', [
-  AuthenticationMiddleware.AuthenticateToken
+  AuthenticationMiddleware.AuthenticateToken,
+  ValidationMiddleware.ValidatePayload(ValidateCategory.createCategory(), 'body')
 ], CategoryController.updatecategory);
 
 categoryRoute.delete('/category/:id', [
-  AuthenticationMiddleware.AuthenticateToken,
-  ValidationMiddleware.ValidatePayload(ValidateCategory.updateCategory(), 'body')
+  AuthenticationMiddleware.AuthenticateToken
 ], CategoryController.deleteCategory);
 
 export default categoryRoute;
