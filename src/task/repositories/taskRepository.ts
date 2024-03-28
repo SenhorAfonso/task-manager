@@ -12,6 +12,8 @@ import userID from '../DTOs/userID';
 import IAuthenticatedDocument from '../../interface/IAuthenticatedDocument';
 import categorySchema from '../../category/schema/categorySchema';
 import UnauthorizedAccessError from '../../errors/unauthorizedAccessError';
+import type nullable from '../../types/nullable';
+import type mongoDocument from '../../types/mongoDocument';
 
 class TaskRepository {
 
@@ -21,8 +23,8 @@ class TaskRepository {
     const success: boolean = true;
     const { category } = createTaskPayload;
 
-    let result: mongoose.Document | null;
-    let categoryDoc: mongoose.Document | null;
+    let result: nullable<mongoDocument>;
+    let categoryDoc: nullable<mongoDocument>;
 
     try {
       categoryDoc = await categorySchema.findOne({ name: category });
@@ -51,7 +53,7 @@ class TaskRepository {
     const message: string = 'All task were retrieved';
     const success: boolean = true;
 
-    let result: mongoose.Document[] | null;
+    let result: nullable<mongoose.Document[]>;
 
     try {
       result = await taskSchema.find(userID);
@@ -71,7 +73,7 @@ class TaskRepository {
     const message: string = 'Single task were retrieved!';
     const success: boolean = true;
 
-    let result: IAuthenticatedDocument | null;
+    let result: nullable<IAuthenticatedDocument>;
 
     try {
       result = await taskSchema.findById(taskId);
@@ -99,7 +101,7 @@ class TaskRepository {
     const message: string = 'Taks information were updated!';
     const success: boolean = true;
 
-    let result: IAuthenticatedDocument | null;
+    let result: nullable<IAuthenticatedDocument>;
 
     try {
       result = await taskSchema.findOne(taskId);
@@ -133,7 +135,7 @@ class TaskRepository {
     const message: string = 'Task were succesfully deleted!';
     const success: boolean = true;
 
-    let result: IAuthenticatedDocument | null;
+    let result: nullable<IAuthenticatedDocument>;
 
     try {
       result = await taskSchema.findById(taskId);
