@@ -27,7 +27,7 @@ class TaskRepository {
     try {
       categoryDoc = await categorySchema.findOne({ name: category });
     } catch (error) {
-      throw new InternalServerError();
+      throw new InternalServerError('A unknown error ocurred during searching the category by name. Please try again later.');
     }
 
     if (!categoryDoc) {
@@ -40,7 +40,7 @@ class TaskRepository {
     try {
       result = await taskSchema.create(createTaskPayload);
     } catch (error) {
-      throw new InternalServerError();
+      throw new InternalServerError('A unknown error ocurred during creating a new task. Please try again later.');
     }
 
     return { success, status, message, result };
@@ -56,11 +56,11 @@ class TaskRepository {
     try {
       result = await taskSchema.find(userID);
     } catch (error) {
-      throw new InternalServerError();
+      throw new InternalServerError('A unknown error ocurred during searching for all tasks. Please try again later.');
     }
 
     if (APIUtils.isEmpty(result)) {
-      throw new NotFoundError();
+      throw new NotFoundError('The user have no task registered');
     }
 
     return { success, status, message, result };
@@ -79,7 +79,7 @@ class TaskRepository {
       if (error instanceof mongoose.Error.CastError) {
         throw new BadRequestError(`The format of the id ${taskId._id} is invalid!`);
       } else {
-        throw new InternalServerError();
+        throw new InternalServerError('A unknown error ocurred during searching the task by id. Please try again later.');
       }
     }
 
@@ -107,7 +107,7 @@ class TaskRepository {
       if (error instanceof mongoose.Error.CastError) {
         throw new BadRequestError(`The format of the id ${taskId._id} is invalid!`);
       } else {
-        throw new InternalServerError();
+        throw new InternalServerError('A unknown error ocurred during searching the task by id to update. Please try again later.');
       }
     }
 
@@ -137,7 +137,7 @@ class TaskRepository {
       if (error instanceof mongoose.Error.CastError) {
         throw new BadRequestError(`The format of the id ${taskId._id} is invalid!`);
       } else {
-        throw new InternalServerError();
+        throw new InternalServerError('A unknown error ocurred during searching the category by id to delete. Please try again later.');
       }
     }
 
