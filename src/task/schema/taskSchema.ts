@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import userSchema from '../../user/schema/userSchema';
 
 const MIN_TITLE_LENGHT: number = 5;
 const MIN_DESC_LENGHT: number = 5;
@@ -26,8 +25,9 @@ const taskSchema = new mongoose.Schema({
   type: {
     type: String
   },
-  category: {
-    type: String
+  categoryID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'categoryModel'
   },
   status: {
     type: String,

@@ -11,27 +11,27 @@ class TaskService {
     const now = TaskUtils.getNowDate();
     createTaskPayload.date_creation = now;
 
-    const result = TaskRepository.create(createTaskPayload);
+    const result = TaskRepository.createTask(createTaskPayload);
     return result;
   }
 
   static getAllTasks(userID: userID) {
-    const result = TaskRepository.getAll(userID);
+    const result = TaskRepository.getAllTasks(userID);
     return result;
   }
 
   static getSingleTask(taskId: ITaskId, userID: string) {
-    const result = TaskRepository.getById(taskId, userID);
+    const result = TaskRepository.getSingleTask(taskId, userID);
     return result;
   }
 
   static updateTask(taskId: ITaskId, newTaskInfo: IUpdateTask, userID: string) {
-    const result = TaskRepository.update(taskId, newTaskInfo, userID);
+    const result = TaskRepository.updateTask(taskId, newTaskInfo, userID);
     return result;
   }
 
   static deleteTask(taskId: ITaskId, userID: string) {
-    const result = TaskRepository.delete(taskId, userID);
+    const result = TaskRepository.deleteTask(taskId, userID);
     return result;
   }
 
