@@ -31,7 +31,7 @@ class CategoryRepository {
     try {
       result = await categorySchema.create(createCategoryPayload);
     } catch (error) {
-      throw new InternalServerError();
+      throw new InternalServerError('A unknown error ocurred during category creation. Please try again later.');
     }
 
     return { status, success, message, result };
@@ -47,7 +47,7 @@ class CategoryRepository {
     try {
       result = await categorySchema.find({ userID });
     } catch (error) {
-      throw new InternalServerError();
+      throw new InternalServerError('A unknown error ocurred during searching for all categories. Please try again later.');
     }
 
     if (APIUtils.isEmpty(result)) {
@@ -70,7 +70,7 @@ class CategoryRepository {
       if (error instanceof mongoose.Error.CastError) {
         throw new BadRequestError(`The format of the id ${categoryID} is invalid!`);
       } else {
-        throw new InternalServerError();
+        throw new InternalServerError('A unknown error ocurred during searching the category by id. Please try again later.');
       }
     }
 
@@ -96,9 +96,9 @@ class CategoryRepository {
       result = await categorySchema.findById({ _id: categoryID });
     } catch (error) {
       if (error instanceof mongoose.Error.CastError) {
-        throw new BadRequestError();
+        throw new BadRequestError(`The format of the id ${categoryID} is invalid!`);
       } else {
-        throw new InternalServerError();
+        throw new InternalServerError('A unknown error ocurred during searching the category by id to update. Please try again later.');
       }
     }
 
@@ -126,9 +126,9 @@ class CategoryRepository {
       result = await categorySchema.findById({ _id: categoryID });
     } catch (error) {
       if (error instanceof mongoose.Error.CastError) {
-        throw new BadRequestError();
+        throw new BadRequestError(`The format of the id ${categoryID} is invalid!`);
       } else {
-        throw new InternalServerError();
+        throw new InternalServerError('A unknown error ocurred during searching the category by id to delete. Please try again later.');
       }
     }
 
