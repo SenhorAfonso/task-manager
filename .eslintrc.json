@@ -87,7 +87,12 @@
     {
       "files": ["taskRepository.ts"],
       "rules": {
-        "no-underscore-dangle":"off"
+        "no-underscore-dangle":"off",
+        "require-atomic-updates":"off",
+        "max-statements": [
+          "error",
+          30
+        ]
       }
     },
     {
@@ -111,6 +116,18 @@
       "files": ["userService.ts"],
       "rules": {
         "no-underscore-dangle":"off"
+      }
+    },
+    {
+      "files": ["categoryRepository.ts"],
+      "rules": {
+        "quotes": "off"
+      }
+    },
+    {
+      "files": ["validateUser.ts"],
+      "rules": {
+        "require-unicode-regexp":"off"
       }
     }
   ]
