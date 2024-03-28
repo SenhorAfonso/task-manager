@@ -8,6 +8,8 @@ import APIUtils from '../../utils/APIUtils';
 import NotFoundError from '../../errors/notFoundError';
 import BadRequestError from '../../errors/badRequestError';
 import IAuthenticatedDocument from '../../interface/IAuthenticatedDocument';
+import DuplicatedContentError from '../../errors/duplicatedContentError';
+import UnauthorizedAccessError from '../../errors/unauthorizedAccessError';
 
 class CategoryRepository {
 
@@ -23,7 +25,7 @@ class CategoryRepository {
 
     result = await categorySchema.findOne({ userID, name });
     if (!APIUtils.isEmpty(result)) {
-      throw new BadRequestError('The category already exist!');
+      throw new DuplicatedContentError('The category already exist!');
     }
 
     try {
@@ -77,7 +79,7 @@ class CategoryRepository {
     }
 
     if (APIUtils.userDontOwn(userID, result)) {
-      throw new Error('Unauthorized access!');
+      throw new UnauthorizedAccessError('You do not have permissions to access this category!');
     }
 
     return { status, success, message, result };
@@ -105,7 +107,7 @@ class CategoryRepository {
     }
 
     if (APIUtils.userDontOwn(userID, result)) {
-      throw new NotFoundError(`The id ${categoryID} is not associated with any element!`);
+      throw new UnauthorizedAccessError('You do not have permissions to update this category!');
     }
 
     await categorySchema.findByIdAndUpdate({ _id: categoryID }, newCategoryInfo, { new: true });
@@ -135,7 +137,7 @@ class CategoryRepository {
     }
 
     if (APIUtils.userDontOwn(userID, result)) {
-      throw new Error('Unauthorized access!');
+      throw new UnauthorizedAccessError('You do not have permissions to delete this category!');
     }
 
     result = await categorySchema.findByIdAndDelete({ _id: categoryID });
