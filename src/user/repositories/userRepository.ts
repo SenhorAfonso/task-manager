@@ -1,5 +1,4 @@
 import StatusCodes from 'http-status-codes';
-import mongoose from 'mongoose';
 import userSchema from '../schema/userSchema';
 import IRegisterNewUser from '../DTOs/IRegisterNewUser';
 import BadRequestError from '../../errors/badRequestError';
@@ -10,6 +9,8 @@ import NotFoundError from '../../errors/notFoundError';
 import DuplicatedContentError from '../../errors/duplicatedContentError';
 import InternalServerError from '../../errors/internalServerError';
 import IUserDocument from '../enums/IUserDocument';
+import type nullable from '../../types/nullable';
+import type mongoDocument from '../../types/mongoDocument';
 
 class UserRepository {
 
@@ -19,7 +20,7 @@ class UserRepository {
     const success: boolean = true;
     const { email, password, confirmPassword } = registerUserPayload;
 
-    let result: mongoose.Document | null;
+    let result: nullable<mongoDocument>;
 
     try {
       result = await userSchema.findOne({ email });
@@ -50,7 +51,7 @@ class UserRepository {
     const success: boolean = true;
     const { email, password } = loginUserPayload;
 
-    let user: IUserDocument | null;
+    let user: nullable<IUserDocument>;
 
     try {
       user = await userSchema.findOne({ email });
