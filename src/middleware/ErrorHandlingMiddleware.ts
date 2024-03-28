@@ -10,13 +10,13 @@ class ErrorHandlingMiddleware {
     res: Response,
     next: NextFunction
   ) {
+    const success: boolean = false;
     if (error instanceof ApiError) {
       const { name, message, status } = error;
-      const success: boolean = false;
 
-      res.status(status).json({ error: name, message, status, success });
+      res.status(status).json({ success, error: { name, message } });
     } else {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.name, msg: error.message });
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ success, error: { name: error.name, message: error.message } });
     }
   }
 
