@@ -44,7 +44,7 @@ class CategoryRepository {
     return { status, success, message, result };
   }
 
-  static async getAllCategory(userID: string) {
+  static async getAllCategories(userID: string) {
     const status: number = StatusCodes.OK;
     const success: boolean = true;
     const message: string = "All user's categories retrieved successfully!";
@@ -92,7 +92,7 @@ class CategoryRepository {
     return { status, success, message, result };
   }
 
-  static async updatecategory(categoryID: string, newCategoryInfo: IUpdateCategory, userID: string) {
+  static async updateCategory(categoryID: string, newCategoryInfo: IUpdateCategory, userID: string) {
     const status: number = StatusCodes.OK;
     const success: boolean = true;
     const message: string = 'Category updated successfully!';

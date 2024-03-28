@@ -20,7 +20,7 @@ class CategoryController {
     res: Response
   ) {
     const { userID } = req.user!;
-    const { status, success, message, result } = await CategoryService.getAllCategory(userID);
+    const { status, success, message, result } = await CategoryService.getAllCategories(userID);
     res.status(status).json({ success, message, result });
   }
 
@@ -42,7 +42,7 @@ class CategoryController {
     const { name, color } = req.body;
     const { userID } = req.user!;
 
-    const { status, success, message, result } = await CategoryService.updatecategory(id, { name, color }, userID);
+    const { status, success, message, result } = await CategoryService.updateCategory(id, { name, color }, userID);
     res.status(status).json({ success, message, result });
   }
 

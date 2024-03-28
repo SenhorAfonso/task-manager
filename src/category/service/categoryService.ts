@@ -9,8 +9,8 @@ class CategoryService {
     return result;
   }
 
-  static async getAllCategory(userID: string) {
-    const result = await CategoryRepository.getAllCategory(userID);
+  static async getAllCategories(userID: string) {
+    const result = await CategoryRepository.getAllCategories(userID);
     return result;
   }
 
@@ -19,8 +19,8 @@ class CategoryService {
     return result;
   }
 
-  static async updatecategory(categoryID: string, newCategoryInfo: IUpdateCategory, userID: string) {
-    const result = await CategoryRepository.updatecategory(categoryID, newCategoryInfo, userID);
+  static async updateCategory(categoryID: string, newCategoryInfo: IUpdateCategory, userID: string) {
+    const result = await CategoryRepository.updateCategory(categoryID, newCategoryInfo, userID);
     return result;
   }
 

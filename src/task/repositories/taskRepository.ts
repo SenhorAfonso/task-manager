@@ -17,7 +17,7 @@ import type mongoDocument from '../../types/mongoDocument';
 
 class TaskRepository {
 
-  static async create(createTaskPayload: IcreateTask) {
+  static async createTask(createTaskPayload: IcreateTask) {
     const status: number = StatusCodes.CREATED;
     const message: string = 'Task successfully created!';
     const success: boolean = true;
@@ -48,7 +48,7 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static async getAll(userID: userID) {
+  static async getAllTasks(userID: userID) {
     const status: number = StatusCodes.OK;
     const message: string = 'All task were retrieved';
     const success: boolean = true;
@@ -68,7 +68,7 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static async getById(taskId: ITaskId, userID: string) {
+  static async getSingleTask(taskId: ITaskId, userID: string) {
     const status: number = StatusCodes.OK;
     const message: string = 'Single task were retrieved!';
     const success: boolean = true;
@@ -96,7 +96,7 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static async update(taskId: ITaskId, newTaskInfo: IUpdateTask, userID: string) {
+  static async updateTask(taskId: ITaskId, newTaskInfo: IUpdateTask, userID: string) {
     const status: number = StatusCodes.OK;
     const message: string = 'Taks information were updated!';
     const success: boolean = true;
@@ -145,7 +145,7 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static async delete(taskId: ITaskId, userID: string) {
+  static async deleteTask(taskId: ITaskId, userID: string) {
     const status: number = StatusCodes.OK;
     const message: string = 'Task were succesfully deleted!';
     const success: boolean = true;
