@@ -9,7 +9,7 @@ import NotFoundError from '../../errors/notFoundError';
 import BadRequestError from '../../errors/badRequestError';
 import APIUtils from '../../utils/APIUtils';
 import userID from '../DTOs/userID';
-import taskDocument from '../DTOs/taskDocument';
+import IAuthenticatedDocument from '../../interface/IAuthenticatedDocument';
 import categorySchema from '../../category/schema/categorySchema';
 
 class TaskRepository {
@@ -70,7 +70,7 @@ class TaskRepository {
     const message: string = 'Single task were retrieved!';
     const success: boolean = true;
 
-    let result: taskDocument | null;
+    let result: IAuthenticatedDocument | null;
 
     try {
       result = await taskSchema.findById(taskId);
@@ -98,7 +98,7 @@ class TaskRepository {
     const message: string = 'Taks information were updated!';
     const success: boolean = true;
 
-    let result: taskDocument | null;
+    let result: IAuthenticatedDocument | null;
 
     try {
       result = await taskSchema.findOne(taskId);
@@ -128,7 +128,7 @@ class TaskRepository {
     const message: string = 'Task were succesfully deleted!';
     const success: boolean = true;
 
-    let result: taskDocument | null;
+    let result: IAuthenticatedDocument | null;
 
     try {
       result = await taskSchema.findById(taskId);
