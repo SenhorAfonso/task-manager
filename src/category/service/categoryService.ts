@@ -9,23 +9,23 @@ class CategoryService {
     return result;
   }
 
-  static async getAllCategory() {
-    const result = await CategoryRepository.getAllCategory();
+  static async getAllCategory(userID: string) {
+    const result = await CategoryRepository.getAllCategory(userID);
     return result;
   }
 
-  static async getSingleCategory(categoryID: string) {
-    const result = await CategoryRepository.getSingleCategory(categoryID);
+  static async getSingleCategory(categoryID: string, userID: string) {
+    const result = await CategoryRepository.getSingleCategory(categoryID, userID);
     return result;
   }
 
-  static async updatecategory(categoryID: string, newCategoryInfo: IUpdateCategory) {
-    const result = await CategoryRepository.updatecategory(categoryID, newCategoryInfo);
+  static async updatecategory(categoryID: string, newCategoryInfo: IUpdateCategory, userID: string) {
+    const result = await CategoryRepository.updatecategory(categoryID, newCategoryInfo, userID);
     return result;
   }
 
-  static async deleteCategory(categoryID: string) {
-    const result = await CategoryRepository.deleteCategory(categoryID);
+  static async deleteCategory(categoryID: string, userID: string) {
+    const result = await CategoryRepository.deleteCategory(categoryID, userID);
     return result;
   }
 
