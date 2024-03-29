@@ -8,12 +8,13 @@ import InternalServerError from '../../errors/internalServerError';
 import NotFoundError from '../../errors/notFoundError';
 import BadRequestError from '../../errors/badRequestError';
 import APIUtils from '../../utils/APIUtils';
-import userID from '../DTOs/userID';
 import IAuthenticatedDocument from '../../interface/IAuthenticatedDocument';
 import categorySchema from '../../category/schema/categorySchema';
 import UnauthorizedAccessError from '../../errors/unauthorizedAccessError';
 import type nullable from '../../types/nullable';
 import type mongoDocument from '../../types/mongoDocument';
+import IQuerySearch from '../interface/IQuerySearch';
+import taskDocument from '../interface/taskDocument';
 
 class TaskRepository {
 
@@ -37,7 +38,7 @@ class TaskRepository {
     }
 
     const categoryID = categoryDoc.id;
-    createTaskPayload.category = categoryID;
+    createTaskPayload.categoryID = categoryID;
 
     try {
       result = await taskSchema.create(createTaskPayload);
@@ -48,7 +49,7 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static async getAllTasks(userID: userID) {
+  static async getAllTasks(userID: string) {
     const status: number = StatusCodes.OK;
     const message: string = 'All task were retrieved';
     const success: boolean = true;
@@ -56,7 +57,28 @@ class TaskRepository {
     let result: nullable<mongoose.Document[]>;
 
     try {
-      result = await taskSchema.find(userID);
+      result = await taskSchema.find({ userID });
+    } catch (error) {
+      throw new InternalServerError('A unknown error ocurred during searching for all tasks. Please try again later.');
+    }
+
+    if (APIUtils.isEmpty(result)) {
+      throw new NotFoundError('The user have no task registered');
+    }
+    return { success, status, message, result };
+  }
+
+  static async getAllTasksByArray(userID: string, queryObject: IQuerySearch) {
+    const status: number = StatusCodes.OK;
+    const message: string = 'All task were retrieved';
+    const success: boolean = true;
+    const resultArray: taskDocument[] = [];
+
+    const categoryID = await APIUtils.getCategoryID(queryObject.category!);
+    let result: nullable<taskDocument[]>;
+
+    try {
+      result = await taskSchema.find({ userID });
     } catch (error) {
       throw new InternalServerError('A unknown error ocurred during searching for all tasks. Please try again later.');
     }
@@ -65,7 +87,13 @@ class TaskRepository {
       throw new NotFoundError('The user have no task registered');
     }
 
-    return { success, status, message, result };
+    result.forEach(element => {
+      if (element.categoryID.toString() === categoryID.toString()) {
+        resultArray.push(element);
+      }
+    });
+
+    return { success, status, message, result: resultArray };
   }
 
   static async getSingleTask(taskId: ITaskId, userID: string) {
