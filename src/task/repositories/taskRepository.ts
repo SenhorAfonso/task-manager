@@ -13,7 +13,6 @@ import categorySchema from '../../category/schema/categorySchema';
 import UnauthorizedAccessError from '../../errors/unauthorizedAccessError';
 import type nullable from '../../types/nullable';
 import type mongoDocument from '../../types/mongoDocument';
-import IQuerySearch from '../interface/IQuerySearch';
 import taskDocument from '../interface/taskDocument';
 
 class TaskRepository {
@@ -54,7 +53,7 @@ class TaskRepository {
     const message: string = 'All task were retrieved';
     const success: boolean = true;
 
-    let result: nullable<mongoose.Document[]>;
+    let result: nullable<taskDocument[]>;
 
     try {
       result = await taskSchema.find({ userID });
@@ -68,32 +67,24 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static async getAllTasksByArray(userID: string, queryObject: IQuerySearch) {
-    const status: number = StatusCodes.OK;
-    const message: string = 'All task were retrieved';
-    const success: boolean = true;
-    const resultArray: taskDocument[] = [];
+  static async getCategoryID(name: string): Promise<string|undefined> {
+    if (!name) {
+      return;
+    }
 
-    const categoryID = await APIUtils.getCategoryID(queryObject.category!);
-    let result: nullable<taskDocument[]>;
+    let categoryDoc: nullable<mongoDocument>;
 
     try {
-      result = await taskSchema.find({ userID });
+      categoryDoc = await categorySchema.findOne({ name });
     } catch (error) {
-      throw new InternalServerError('A unknown error ocurred during searching for all tasks. Please try again later.');
+      throw new InternalServerError('A unknown error ocurred during searching for category name. Please try again later.');
     }
 
-    if (APIUtils.isEmpty(result)) {
-      throw new NotFoundError('The user have no task registered');
+    if (APIUtils.isEmpty(categoryDoc)) {
+      throw new NotFoundError(`The category ${name} does not exist!`);
     }
 
-    result.forEach(element => {
-      if (element.categoryID.toString() === categoryID.toString()) {
-        resultArray.push(element);
-      }
-    });
-
-    return { success, status, message, result: resultArray };
+    return categoryDoc!.id;
   }
 
   static async getSingleTask(taskId: ITaskId, userID: string) {
