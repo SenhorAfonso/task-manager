@@ -11,7 +11,10 @@ class TaskService {
 
   static createTask(createTaskPayload: createTask) {
     const now = TaskUtils.getNowDate();
+    const conclusion = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 30))
+
     createTaskPayload.date_creation = now;
+    createTaskPayload.date_conclusion = conclusion;
 
     const result = TaskRepository.createTask(createTaskPayload);
     return result;
@@ -33,6 +36,10 @@ class TaskService {
 
     if (queryObject.status) {
       result = TaskService.getTaskByStatus(queryObject.status, result);
+    }
+
+    if (queryObject.conclusion) {
+      result = TaskService.getTaskByDate(queryObject.conclusion, result);
     }
 
     return { success, status, message, result };
@@ -70,6 +77,13 @@ class TaskService {
     const filter = APIUtils.createCustomFilter(status);
 
     return taskArray.filter(filter);
+  }
+
+  static getTaskByDate(expirationDate: string, taskArray: taskDocument[]) {
+    let filteredArray: taskDocument[] = [];
+
+    filteredArray = taskArray.filter(element => element.date_conclusion.toLocaleDateString() === expirationDate);
+    return filteredArray;
   }
 
 }
