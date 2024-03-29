@@ -1,5 +1,6 @@
 import IAuthenticatedDocument from '../interface/IAuthenticatedDocument';
 import IQuerySearch from '../task/interface/IQuerySearch';
+import taskDocument from '../task/interface/taskDocument';
 
 class APIUtils {
   static isEmpty(target: any[] | any): boolean {
@@ -29,6 +30,12 @@ class APIUtils {
     }
 
     return queryObject;
+  }
+
+  static createCustomFilter(status: string) {
+    return function(task: taskDocument) {
+      return task.status === status;
+    };
   }
 
 }

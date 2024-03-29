@@ -31,6 +31,10 @@ class TaskService {
       result = await TaskService.getTaskByCategory(queryObject.category, result);
     }
 
+    if (queryObject.status) {
+      result = TaskService.getTaskByStatus(queryObject.status, result);
+    }
+
     return { success, status, message, result };
   }
 
@@ -60,6 +64,12 @@ class TaskService {
     });
 
     return filteredArray;
+  }
+
+  static getTaskByStatus(status: string, taskArray: taskDocument[]): taskDocument[] {
+    const filter = APIUtils.createCustomFilter(status);
+
+    return taskArray.filter(filter);
   }
 
 }
