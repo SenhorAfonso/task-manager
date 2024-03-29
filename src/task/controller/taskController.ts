@@ -20,7 +20,7 @@ class TaskController {
     res: Response
   ) {
     const { userID } = req.user!;
-    const { success, status, message, result } = await TaskService.getAllTasks({ userID });
+    const { success, status, message, result } = await TaskService.getAllTasks(userID, req.query);
 
     res.status(status).json({ success, message, result });
   }
@@ -33,6 +33,16 @@ class TaskController {
     const { userID } = req.user!;
 
     const { success, status, message, result } = await TaskService.getSingleTask({ _id: id }, userID);
+    res.status(status).json({ success, message, result });
+  }
+
+  static async getTaksByArray (
+    req: AuthenticatedRequest,
+    res: Response
+  ) {
+    const { userID } = req.user!;
+    const { success, status, message, result } = await TaskService.getAllTasksByArray(userID, req.query);
+
     res.status(status).json({ success, message, result });
   }
 
