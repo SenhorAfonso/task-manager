@@ -20,7 +20,7 @@ class TaskController {
     res: Response
   ) {
     const { userID } = req.user!;
-    const { success, status, message, result } = await TaskService.getAllTasks(userID, req.query);
+    const { success, status, message, result } = await TaskService.getAllTasks(userID);
 
     res.status(status).json({ success, message, result });
   }
