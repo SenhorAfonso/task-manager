@@ -1,6 +1,6 @@
 interface IQuerySearch {
   category?: string,
-  taskStatus?: 'pending' | 'in-progress' | 'finished',
+  status?: 'pending' | 'in-progress' | 'finished',
   expiration?: string,
   userID?: string
 }

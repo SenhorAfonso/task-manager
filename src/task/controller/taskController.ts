@@ -8,9 +8,9 @@ class TaskController {
     req: AuthenticatedRequest,
     res: Response
   ) {
-    const { title, description, type, category } = req.body;
+    const { title, description, type, category, status: taskStatus } = req.body;
     const { userID } = req.user!;
-    const { success, status, message, result } = await TaskService.createTask({ userID, title, description, type, category });
+    const { success, status, message, result } = await TaskService.createTask({ userID, title, description, type, category, status: taskStatus });
 
     res.status(status).json({ success, message, result });
   }

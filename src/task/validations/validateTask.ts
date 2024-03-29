@@ -19,6 +19,10 @@ class ValidateTask {
         .required(),
 
       category: Joi.string()
+        .required(),
+
+      status: Joi.string()
+        .valid('pending', 'in-progress', 'finished')
         .required()
     });
 
@@ -39,6 +43,10 @@ class ValidateTask {
         .required(),
 
       category: Joi.string()
+        .required(),
+
+      status: Joi.string()
+        .valid('pending', 'in-progress', 'finished')
         .required()
     });
 
