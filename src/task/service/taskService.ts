@@ -3,7 +3,8 @@ import TaskRepository from '../repositories/taskRepository';
 import TaskUtils from '../utils/taskUtils';
 import IUpdateTask from '../DTOs/updateTask';
 import ITaskId from '../DTOs/ITaskId';
-import userID from '../DTOs/userID';
+import IQuerySearch from '../interface/IQuerySearch';
+import APIUtils from '../../utils/APIUtils';
 
 class TaskService {
 
@@ -15,8 +16,14 @@ class TaskService {
     return result;
   }
 
-  static getAllTasks(userID: userID) {
+  static getAllTasks(userID: string) {
     const result = TaskRepository.getAllTasks(userID);
+    return result;
+  }
+
+  static getAllTasksByArray(userID: string, query: IQuerySearch) {
+    const queryObject = APIUtils.createQueryObject(query);
+    const result = TaskRepository.getAllTasksByArray(userID, queryObject);
     return result;
   }
 
