@@ -15,6 +15,10 @@ taskRouter.get('/task', [
   AuthenticationMiddleware.AuthenticateToken
 ], TaskController.getTasks);
 
+taskRouter.get('/task-array', [
+  AuthenticationMiddleware.AuthenticateToken
+], TaskController.getTaksByArray);
+
 taskRouter.get('/task/:id', [
   AuthenticationMiddleware.AuthenticateToken
 ], TaskController.getSingleTask);
