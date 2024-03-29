@@ -5,6 +5,7 @@ import IUpdateTask from '../DTOs/updateTask';
 import ITaskId from '../DTOs/ITaskId';
 import IQuerySearch from '../interface/IQuerySearch';
 import APIUtils from '../../utils/APIUtils';
+import taskDocument from '../interface/taskDocument';
 
 class TaskService {
 
@@ -21,10 +22,16 @@ class TaskService {
     return result;
   }
 
-  static getAllTasksByArray(userID: string, query: IQuerySearch) {
+  static async getAllTasksByArray(userID: string, query: IQuerySearch) {
     const queryObject = APIUtils.createQueryObject(query);
-    const result = TaskRepository.getAllTasksByArray(userID, queryObject);
-    return result;
+
+    let { success, status, message, result } = await TaskRepository.getAllTasks(userID);
+
+    if (queryObject.category) {
+      result = await TaskService.getTaskByCategory(queryObject.category, result);
+    }
+
+    return { success, status, message, result };
   }
 
   static getSingleTask(taskId: ITaskId, userID: string) {
@@ -40,6 +47,19 @@ class TaskService {
   static deleteTask(taskId: ITaskId, userID: string) {
     const result = TaskRepository.deleteTask(taskId, userID);
     return result;
+  }
+
+  static async getTaskByCategory(categoryName: string, taskArray: taskDocument[]): Promise<taskDocument[]> {
+    const categoryID = await TaskRepository.getCategoryID(categoryName);
+    const filteredArray: taskDocument[] = [];
+
+    taskArray.forEach(element => {
+      if (element.categoryID.toString() === categoryID) {
+        filteredArray.push(element);
+      }
+    });
+
+    return filteredArray;
   }
 
 }
