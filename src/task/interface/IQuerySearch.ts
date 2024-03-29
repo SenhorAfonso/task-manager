@@ -1,7 +1,7 @@
 interface IQuerySearch {
   category?: string,
   status?: 'pending' | 'in-progress' | 'finished',
-  expiration?: string,
+  conclusion?: string,
   userID?: string
 }
 

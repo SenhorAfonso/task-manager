@@ -25,8 +25,8 @@ class APIUtils {
       queryObject.status = query.status;
     }
 
-    if (query.expiration) {
-      queryObject.expiration = query.expiration;
+    if (query.conclusion) {
+      queryObject.conclusion = query.conclusion;
     }
 
     return queryObject;
