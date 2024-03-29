@@ -6,6 +6,7 @@ interface IcreateTask {
   date_conclusion?: Date,
   type: string,
   category: string,
+  categoryID?: string,
   status?: string,
 }
 
