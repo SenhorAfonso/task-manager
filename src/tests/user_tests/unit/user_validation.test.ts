@@ -37,4 +37,38 @@ describe('Validation payload for users sign-up route.', () => {
 
   });
 
+  describe('Validate weight field and value', () => {
+
+    it('Should return a "weight must be greater than or equal to 1" error', () => {
+      const userPayload = {
+        username: 'Pedro',
+        weight: 0,
+        email: 'pedroafonso@gmail.com',
+        password: 'password123',
+        confirmPassword: 'password123'
+      };
+
+      const error = TestUtils.validateObject(ValidateUser.registerUser(), userPayload).error!.details[0]!;
+
+      expect(error.message).toMatch('"weight" must be greater than or equal to 1');
+      expect(error.path).toStrictEqual(['weight']);
+    });
+
+    it('Should return a "weight is required" error', () => {
+      const userPayload = {
+        username: 'Pedro',
+        invalid: 75,
+        email: 'pedroafonso@gmail.com',
+        password: 'password123',
+        confirmPassword: 'password123'
+      };
+
+      const error = TestUtils.validateObject(ValidateUser.registerUser(), userPayload).error!.details[0]!;
+
+      expect(error.message).toMatch('"weight" is required');
+      expect(error.path).toStrictEqual(['weight']);
+    });
+
+  });
+
 });
