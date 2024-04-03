@@ -71,4 +71,38 @@ describe('Validation payload for users sign-up route.', () => {
 
   });
 
+  describe('Validate email field and value', () => {
+
+    it('Should return a "email must be a valid email" error', () => {
+      const userPayload = {
+        username: 'Pedro',
+        weight: 75,
+        email: 'pedroafonsogmail.com',
+        password: 'password123',
+        confirmPassword: 'password123'
+      };
+
+      const error = TestUtils.validateObject(ValidateUser.registerUser(), userPayload).error!.details[0]!;
+
+      expect(error.message).toMatch('"email" must be a valid email');
+      expect(error.path).toStrictEqual(['email']);
+    });
+
+    it('Should return a "email is required" error', () => {
+      const userPayload = {
+        username: 'Pedro',
+        weight: 75,
+        invalid: 'pedroafonso@gmail.com',
+        password: 'password123',
+        confirmPassword: 'password123'
+      };
+
+      const error = TestUtils.validateObject(ValidateUser.registerUser(), userPayload).error!.details[0]!;
+
+      expect(error.message).toMatch('"email" is required');
+      expect(error.path).toStrictEqual(['email']);
+    });
+
+  });
+
 });
