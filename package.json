@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon dist/app.js",
-    "lint": "eslint ./src/"
+    "lint": "eslint ./src/",
+    "test": "npx jest src/tests/ --detectOpenHandles",
+    "test:coverage": "npx jest src/tests/ --coverage"
   },
   "keywords": [],
   "author": "",
