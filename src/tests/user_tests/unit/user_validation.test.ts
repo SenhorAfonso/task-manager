@@ -105,4 +105,72 @@ describe('Validation payload for users sign-up route.', () => {
 
   });
 
+  describe('Validate password field and value', () => {
+
+    it('Should return an "invalid pattern " error to passwords with less than 6 characters', () => {
+      const userPayload = {
+        username: 'Pedro',
+        weight: 75,
+        email: 'pedroafonso@gmail.com',
+        password: 'pass',
+        confirmPassword: 'password123'
+      };
+
+      const error = TestUtils.validateObject(ValidateUser.registerUser(), userPayload).error!.details[0]!;
+
+      expect(error.message).toMatch('"password" with value "pass" fails to match the required pattern: /^[a-zA-Z0-9]{6,30}$/');
+      expect(error.path).toStrictEqual(['password']);
+    });
+
+    it('Should return a "password is required" error', () => {
+      const userPayload = {
+        username: 'Pedro',
+        weight: 75,
+        email: 'pedroafonso@gmail.com',
+        invalid: 'password123',
+        confirmPassword: 'password123'
+      };
+
+      const error = TestUtils.validateObject(ValidateUser.registerUser(), userPayload).error!.details[0]!;
+
+      expect(error.message).toMatch('"password" is required');
+      expect(error.path).toStrictEqual(['password']);
+    });
+
+  });
+
+  describe('Validate confirm password field and value', () => {
+
+    it('Should return an "invalid pattern " error to password confirmation with less than 6 characters', () => {
+      const userPayload = {
+        username: 'Pedro',
+        weight: 75,
+        email: 'pedroafonso@gmail.com',
+        password: 'password123',
+        confirmPassword: 'pass'
+      };
+
+      const error = TestUtils.validateObject(ValidateUser.registerUser(), userPayload).error!.details[0]!;
+
+      expect(error.message).toMatch('"confirmPassword" with value "pass" fails to match the required pattern: /^[a-zA-Z0-9]{6,30}$/');
+      expect(error.path).toStrictEqual(['confirmPassword']);
+    });
+
+    it('Should return a "confirmPassword is required" error', () => {
+      const userPayload = {
+        username: 'Pedro',
+        weight: 75,
+        email: 'pedroafonso@gmail.com',
+        password: 'password123',
+        invalid: 'password123'
+      };
+
+      const error = TestUtils.validateObject(ValidateUser.registerUser(), userPayload).error!.details[0]!;
+
+      expect(error.message).toMatch('"confirmPassword" is required');
+      expect(error.path).toStrictEqual(['confirmPassword']);
+    });
+
+  });
+
 });
