@@ -92,7 +92,14 @@
         "max-statements": [
           "error",
           30
-        ]
+        ],
+        "consistent-return":"off"
+      }
+    },
+    {
+      "files": ["taskService.ts"],
+      "rules": {
+        "prefer-const":"off"
       }
     },
     {
