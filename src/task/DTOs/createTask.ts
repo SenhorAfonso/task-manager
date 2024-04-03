@@ -6,7 +6,8 @@ interface IcreateTask {
   date_conclusion?: Date,
   type: string,
   category: string,
-  status?: string,
+  categoryID?: string,
+  status: 'pending' | 'in-progress' | 'finished',
 }
 
 export default IcreateTask;

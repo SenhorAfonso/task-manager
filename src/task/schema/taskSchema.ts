@@ -21,6 +21,7 @@ const taskSchema = new mongoose.Schema({
   },
   date_conclusion: {
     type: Date,
+    require: [true, 'Conclusion date is a required field!']
   },
   type: {
     type: String

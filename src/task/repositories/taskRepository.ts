@@ -8,12 +8,12 @@ import InternalServerError from '../../errors/internalServerError';
 import NotFoundError from '../../errors/notFoundError';
 import BadRequestError from '../../errors/badRequestError';
 import APIUtils from '../../utils/APIUtils';
-import userID from '../DTOs/userID';
 import IAuthenticatedDocument from '../../interface/IAuthenticatedDocument';
 import categorySchema from '../../category/schema/categorySchema';
 import UnauthorizedAccessError from '../../errors/unauthorizedAccessError';
 import type nullable from '../../types/nullable';
 import type mongoDocument from '../../types/mongoDocument';
+import taskDocument from '../interface/taskDocument';
 
 class TaskRepository {
 
@@ -37,7 +37,7 @@ class TaskRepository {
     }
 
     const categoryID = categoryDoc.id;
-    createTaskPayload.category = categoryID;
+    createTaskPayload.categoryID = categoryID;
 
     try {
       result = await taskSchema.create(createTaskPayload);
@@ -48,15 +48,15 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static async getAllTasks(userID: userID) {
+  static async getAllTasks(userID: string) {
     const status: number = StatusCodes.OK;
     const message: string = 'All task were retrieved';
     const success: boolean = true;
 
-    let result: nullable<mongoose.Document[]>;
+    let result: nullable<taskDocument[]>;
 
     try {
-      result = await taskSchema.find(userID);
+      result = await taskSchema.find({ userID });
     } catch (error) {
       throw new InternalServerError('A unknown error ocurred during searching for all tasks. Please try again later.');
     }
@@ -64,8 +64,27 @@ class TaskRepository {
     if (APIUtils.isEmpty(result)) {
       throw new NotFoundError('The user have no task registered');
     }
-
     return { success, status, message, result };
+  }
+
+  static async getCategoryID(name: string): Promise<string|undefined> {
+    if (!name) {
+      return;
+    }
+
+    let categoryDoc: nullable<mongoDocument>;
+
+    try {
+      categoryDoc = await categorySchema.findOne({ name });
+    } catch (error) {
+      throw new InternalServerError('A unknown error ocurred during searching for category name. Please try again later.');
+    }
+
+    if (APIUtils.isEmpty(categoryDoc)) {
+      throw new NotFoundError(`The category ${name} does not exist!`);
+    }
+
+    return categoryDoc!.id;
   }
 
   static async getSingleTask(taskId: ITaskId, userID: string) {
@@ -175,6 +194,44 @@ class TaskRepository {
     } catch (error) {
       throw new InternalServerError('A unknown error ocurred during task delete. Please try again later');
     }
+
+    return { success, status, message, result };
+  }
+
+  static async aggregateTaskByCategory(userID: string) {
+    const status: number = StatusCodes.OK;
+    const message: string = 'All task were retrieved';
+    const success: boolean = true;
+
+    const result = await taskSchema.aggregate([
+      {
+        $match: {
+          userID: new mongoose.Types.ObjectId(userID)
+        }
+      },
+      {
+        $lookup: {
+          from: 'categorymodels',
+          localField: 'categoryID',
+          foreignField: '_id',
+          as: 'category'
+        }
+      },
+      {
+        $unwind: '$category'
+      },
+      {
+        $addFields: {
+          categoryName: '$category.name'
+        }
+      },
+      {
+        $group: {
+          _id: '$categoryID',
+          tasks: { $push: '$$ROOT' }
+        }
+      }
+    ]);
 
     return { success, status, message, result };
   }
