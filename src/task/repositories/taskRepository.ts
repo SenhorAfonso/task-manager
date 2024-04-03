@@ -198,6 +198,44 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
+  static async aggregateTaskByCategory(userID: string) {
+    const status: number = StatusCodes.OK;
+    const message: string = 'All task were retrieved';
+    const success: boolean = true;
+
+    const result = await taskSchema.aggregate([
+      {
+        $match: {
+          userID: new mongoose.Types.ObjectId(userID)
+        }
+      },
+      {
+        $lookup: {
+          from: 'categorymodels',
+          localField: 'categoryID',
+          foreignField: '_id',
+          as: 'category'
+        }
+      },
+      {
+        $unwind: '$category'
+      },
+      {
+        $addFields: {
+          categoryName: '$category.name'
+        }
+      },
+      {
+        $group: {
+          _id: '$categoryID',
+          tasks: { $push: '$$ROOT' }
+        }
+      }
+    ]);
+
+    return { success, status, message, result };
+  }
+
 }
 
 export default TaskRepository;
