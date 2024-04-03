@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
   },
   weight: {
     type: Number,
-    min: [0, 'The weight must be greater than 0!'],
+    min: [1, 'The weight must be greater than 1!'],
     require: [true, 'Weight is a required field!']
   },
   email: {

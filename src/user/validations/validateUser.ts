@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 const MIN_USERNAME_LENGHT = 5;
-const MIN_WEIGHT_VALUE = 0;
+const MIN_WEIGHT_VALUE = 1;
 
 class ValidateUser {
 

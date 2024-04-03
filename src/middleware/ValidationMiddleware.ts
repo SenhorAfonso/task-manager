@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import Joi from 'joi';
-import BadRequestError from '../errors/badRequestError';
 
 class ValidationMiddleware {
 
@@ -20,7 +19,7 @@ class ValidationMiddleware {
       });
 
       if (error) {
-        throw new BadRequestError();
+        throw error;
       }
 
       return next();

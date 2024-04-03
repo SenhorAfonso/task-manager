@@ -34,7 +34,7 @@ class CategoryController {
     res.status(status).json({ success, message, result });
   }
 
-  static async updatecategory(
+  static async updateCategory(
     req: AuthenticatedRequest,
     res: Response
   ) {

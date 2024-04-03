@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import serverConfig from '../config/config';
 import IJwtPayload from '../interface/AuthMiddleware/IJwtPayload';
 import AuthenticateRequest from '../interface/AuthenticatedRequest';
+import UnauthorizedAccessError from '../errors/unauthorizedAccessError';
 
 class AuthenticationMiddleware{
 
@@ -14,7 +15,7 @@ class AuthenticationMiddleware{
     const authHeader = req.headers.authorization;
 
     if (AuthenticationMiddleware.authHeaderIsNotValid(authHeader)) {
-      throw new Error('Unauthenticated!');
+      throw new UnauthorizedAccessError('Unauthenticated!');
     }
 
     const token = authHeader!.split(' ')[1];
