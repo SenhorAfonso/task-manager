@@ -22,7 +22,7 @@ class TaskController {
     const { userID } = req.user!;
     const { success, status, message, result } = await TaskService.getAllTasks(userID);
 
-    res.status(status).json({ success, message, result });
+    res.status(status).json({ success, message, count: result.length, result });
   }
 
   static async getSingleTask (
@@ -36,12 +36,32 @@ class TaskController {
     res.status(status).json({ success, message, result });
   }
 
-  static async getTaksByArray (
+  static async getTaskByArray (
     req: AuthenticatedRequest,
     res: Response
   ) {
     const { userID } = req.user!;
     const { success, status, message, result } = await TaskService.getAllTasksByArray(userID, req.query);
+
+    res.status(status).json({ success, message, result });
+  }
+
+  static async getTaskInfo (
+    req: AuthenticatedRequest,
+    res: Response
+  ) {
+    const { userID } = req.user!;
+    const { success, status, message, result } = await TaskService.getTasksInfo(userID);
+
+    res.status(status).json({ success, message, result });
+  }
+
+  static async aggregateTask(
+    req: AuthenticatedRequest,
+    res: Response
+  ) {
+    const { userID } = req.user!;
+    const { success, status, message, result } = await TaskService.aggregateTask(userID);
 
     res.status(status).json({ success, message, result });
   }
