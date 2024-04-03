@@ -22,7 +22,7 @@ categoryRoute.get('/category/:id', [
 categoryRoute.put('/category/:id', [
   AuthenticationMiddleware.AuthenticateToken,
   ValidationMiddleware.ValidatePayload(ValidateCategory.createCategory(), 'body')
-], CategoryController.updatecategory);
+], CategoryController.updateCategory);
 
 categoryRoute.delete('/category/:id', [
   AuthenticationMiddleware.AuthenticateToken
