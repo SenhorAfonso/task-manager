@@ -105,4 +105,21 @@ describe('Check user\'s login route\'s http responses', () => {
     expect(response.body.error.message).toBe('The email or password is incorrect!');
   });
 
+  it('Should return 400 status code when the payload is invalid', async () => {
+    const userLoginPayload = {
+      email: '',
+      password: '',
+    };
+
+    const response = await request(server)
+      .post('/api/v1/user/login')
+      .send(userLoginPayload);
+
+    expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+    expect(response.body.success).toBeFalsy();
+    expect(response.body.errors).toBeInstanceOf(Array);
+    expect(response.body.errors).toHaveLength(2);
+
+  });
+
 });
