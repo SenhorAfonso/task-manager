@@ -50,7 +50,7 @@ class TaskRepository {
 
   static async getAllTasks(userID: string) {
     const status: number = StatusCodes.OK;
-    const message: string = 'All task were retrieved';
+    const message: string = 'All task were retrieved!';
     const success: boolean = true;
 
     let result: nullable<taskDocument[]>;
