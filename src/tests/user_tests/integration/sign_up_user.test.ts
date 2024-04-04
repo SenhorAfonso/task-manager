@@ -9,13 +9,13 @@ let mongoServer: MongoMemoryServer;
 
 describe('Check user\'s sign-up route\'s http response', () => {
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     mongoServer = await MongoMemoryServer.create();
     const mongoURI = mongoServer.getUri();
     await mongoose.connect(mongoURI);
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await userSchema.collection.drop();
     await mongoServer.stop();
     await mongoose.connection.close();
@@ -78,6 +78,26 @@ describe('Check user\'s sign-up route\'s http response', () => {
     expect(response.status).toBe(StatusCodes.BAD_REQUEST);
     expect(response.body.success).toBeFalsy();
     expect(response.body.error.message).toBe('The email entered is already registered!');
+
+  });
+
+  it('Should return 400 status code when the payload is invalid', async () => {
+    const userSignUpPayload = {
+      username: '',
+      email: '',
+      weight: 0,
+      password: '',
+      confirmPassword: ''
+    };
+
+    const response = await request(server)
+      .post('/api/v1/user/signup')
+      .send(userSignUpPayload);
+
+    expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+    expect(response.body.success).toBeFalsy();
+    expect(response.body.errors).toBeInstanceOf(Array);
+    expect(response.body.errors).toHaveLength(5);
 
   });
 
