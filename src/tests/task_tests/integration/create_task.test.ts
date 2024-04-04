@@ -47,4 +47,56 @@ describe('Chech task\'s create route http responses', () => {
     expect(response.body.success).toBeFalsy();
   });
 
+  it('Should return 201 when the payload is valid', async () => {
+    const userSignUpPayload = {
+      username: 'Pedro',
+      email: 'pedroafonso@gmail.com',
+      weight: 75,
+      password: 'password123',
+      confirmPassword: 'password123'
+    };
+
+    await request(server)
+      .post('/api/v1/user/signup')
+      .send(userSignUpPayload);
+
+    const userLoginPayload = {
+      email: 'pedroafonso@gmail.com',
+      password: 'password123'
+    };
+
+    const loginResponse = await request(server)
+      .post('/api/v1/user/login')
+      .send(userLoginPayload);
+
+    const { token } = loginResponse.body.data;
+
+    const createCategoryPayload = {
+      name: 'Graduation',
+      color: 'Red'
+    };
+
+    await request(server)
+      .post('/api/v1/category')
+      .send(createCategoryPayload)
+      .auth(token, { type: 'bearer' });
+
+    const createTaskPayload = {
+      title: 'Finish the homework',
+      description: 'The homework is the API',
+      type: 'Homework',
+      category: 'Graduation',
+      status: 'pending'
+    };
+
+    const response = await request(server)
+      .post('/api/v1/task')
+      .send(createTaskPayload)
+      .auth(token, { type: 'bearer' });
+
+    expect(response.status).toBe(StatusCodes.CREATED);
+    expect(response.body.message).toBe('Task successfully created!');
+    expect(response.body.success).toBeTruthy();
+  });
+
 });
