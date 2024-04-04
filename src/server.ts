@@ -4,7 +4,6 @@ import taskRouter from './task/taskRoutes';
 import userRouter from './user/userRoutes';
 import categoryRoute from './category/categoryRoutes';
 import ErrorHandlingMiddleware from './middleware/ErrorHandlingMiddleware';
-import DataBase from './database/connectDB';
 
 class Server {
   public server: express.Application;
@@ -12,7 +11,6 @@ class Server {
   constructor() {
     this.server = express();
     this.middlewares();
-    this.database();
   }
 
   middlewares() {
@@ -21,10 +19,6 @@ class Server {
     this.server.use('/api/v1/', userRouter);
     this.server.use('/api/v1/', categoryRoute);
     this.server.use(ErrorHandlingMiddleware.errorHandler);
-  }
-
-  async database() {
-    await DataBase.connect();
   }
 
 }
