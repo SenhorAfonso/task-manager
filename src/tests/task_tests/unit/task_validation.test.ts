@@ -113,4 +113,42 @@ describe('Payload validation for create new task route', () => {
 
   });
 
+  describe('Validate type field and value', () => {
+
+    it('Should return a "type is not allowed to be empty" error', () => {
+
+      const taskPayload = {
+        title: 'Finish the API',
+        description: 'I have to finish the test suit',
+        type: '',
+        category: 'Graduation',
+        status: 'pending'
+      };
+
+      const error = TestUtils.validateObject(ValidateTask.createTaks(), taskPayload).error!.details[0]!;
+
+      expect(error.message).toMatch('"type" is not allowed to be empty');
+      expect(error.path).toStrictEqual(['type']);
+
+    });
+
+    it('Should return a "type is required" error', () => {
+
+      const taskPayload = {
+        title: 'Finish the API',
+        description: 'I have to finish the test suit',
+        invalid: 'Homework',
+        category: 'Graduation',
+        status: 'pending'
+      };
+
+      const error = TestUtils.validateObject(ValidateTask.createTaks(), taskPayload).error!.details[0]!;
+
+      expect(error.message).toMatch('"type" is required');
+      expect(error.path).toStrictEqual(['type']);
+
+    });
+
+  });
+
 });
