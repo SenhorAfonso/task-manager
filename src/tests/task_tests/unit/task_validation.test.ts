@@ -189,4 +189,42 @@ describe('Payload validation for create new task route', () => {
 
   });
 
+  describe('Validate category field and value', () => {
+
+    it('Should return a "status must be one of" error', () => {
+
+      const taskPayload = {
+        title: 'Finish the API',
+        description: 'I have to finish the test suit',
+        type: 'Homework',
+        category: 'Graduation',
+        status: ''
+      };
+
+      const error = TestUtils.validateObject(ValidateTask.createTaks(), taskPayload).error!.details[0]!;
+
+      expect(error.message).toMatch('"status" must be one of [pending, in-progress, finished]');
+      expect(error.path).toStrictEqual(['status']);
+
+    });
+
+    it('Should return a "status is required" error', () => {
+
+      const taskPayload = {
+        title: 'Finish the API',
+        description: 'I have to finish the test suit',
+        type: 'Homework',
+        category: 'Graduation',
+        invalid: 'pending'
+      };
+
+      const error = TestUtils.validateObject(ValidateTask.createTaks(), taskPayload).error!.details[0]!;
+
+      expect(error.message).toMatch('"status" is required');
+      expect(error.path).toStrictEqual(['status']);
+
+    });
+
+  });
+
 });
