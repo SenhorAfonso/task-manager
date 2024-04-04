@@ -66,7 +66,7 @@ class UserRepository {
     const hashedPassword = user!.password!;
 
     if (UserUtils.passwordIsIncorrect(password, hashedPassword)) {
-      throw new BadRequestError('The password is incorrect!');
+      throw new BadRequestError('The email or password is incorrect!');
     }
 
     return { success, message, status, user };

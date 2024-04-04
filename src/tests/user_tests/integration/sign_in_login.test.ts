@@ -49,7 +49,7 @@ describe('Check user\'s login route\'s http responses', () => {
     expect(response.body.message).toBe('User successfully logged in');
   });
 
-  it('Should return 200 status code when the user log-in successfully', async () => {
+  it('Should return 200 status code when the email is differente than the registered one', async () => {
 
     const userSignUpPayload = {
       username: 'Pedro',
@@ -75,6 +75,34 @@ describe('Check user\'s login route\'s http responses', () => {
     expect(response.status).toBe(StatusCodes.NOT_FOUND);
     expect(response.body.success).toBeFalsy();
     expect(response.body.error.message).toBe('There is no user with the provided email!');
+  });
+
+  it('Should return 404 status code when the password is different than the registered one', async () => {
+
+    const userSignUpPayload = {
+      username: 'Pedro',
+      email: 'pedroafonso@gmail.com',
+      weight: 75,
+      password: 'password123',
+      confirmPassword: 'password123'
+    };
+
+    await request(server)
+      .post('/api/v1/user/signup')
+      .send(userSignUpPayload);
+
+    const userLoginPayload = {
+      email: 'pedroafonso@gmail.com',
+      password: '123password'
+    };
+
+    const response = await request(server)
+      .post('/api/v1/user/login')
+      .send(userLoginPayload);
+
+    expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+    expect(response.body.success).toBeFalsy();
+    expect(response.body.error.message).toBe('The email or password is incorrect!');
   });
 
 });
