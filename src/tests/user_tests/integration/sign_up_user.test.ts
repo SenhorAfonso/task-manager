@@ -40,6 +40,24 @@ describe('Check user\'s sign-up route\'s http response', () => {
 
   });
 
+  it('Should return 400 status code when the passwords dont\'t match', async () => {
+    const userSignUpPayload = {
+      username: 'Pedro',
+      email: 'pedroafonso@gmail.com',
+      weight: 75,
+      password: 'password123',
+      confirmPassword: '123password'
+    };
+
+    const response = await request(server)
+      .post('/api/v1/user/signup')
+      .send(userSignUpPayload);
+
+    expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+    expect(response.body.success).toBeFalsy();
+    expect(response.body.error.message).toBe('The passwords do not match!');
+  });
+
   it('Should return 400 status code when the email is already registered', async () => {
     const userSignUpPayload = {
       username: 'Pedro',
