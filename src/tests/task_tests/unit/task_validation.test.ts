@@ -151,4 +151,42 @@ describe('Payload validation for create new task route', () => {
 
   });
 
+  describe('Validate category field and value', () => {
+
+    it('Should return a "category is not allowed to be empty" error', () => {
+
+      const taskPayload = {
+        title: 'Finish the API',
+        description: 'I have to finish the test suit',
+        type: 'Homework',
+        category: '',
+        status: 'pending'
+      };
+
+      const error = TestUtils.validateObject(ValidateTask.createTaks(), taskPayload).error!.details[0]!;
+
+      expect(error.message).toMatch('"category" is not allowed to be empty');
+      expect(error.path).toStrictEqual(['category']);
+
+    });
+
+    it('Should return a "category is required" error', () => {
+
+      const taskPayload = {
+        title: 'Finish the API',
+        description: 'I have to finish the test suit',
+        type: 'Homework',
+        invalid: 'Graduation',
+        status: 'pending'
+      };
+
+      const error = TestUtils.validateObject(ValidateTask.createTaks(), taskPayload).error!.details[0]!;
+
+      expect(error.message).toMatch('"category" is required');
+      expect(error.path).toStrictEqual(['category']);
+
+    });
+
+  });
+
 });
