@@ -15,7 +15,7 @@ import type mongoDocument from '../../types/mongoDocument';
 class UserRepository {
 
   static async registerUser(registerUserPayload: IRegisterNewUser) {
-    const status: number = StatusCodes.OK;
+    const status: number = StatusCodes.CREATED;
     const message: string = 'User successfully registered!';
     const success: boolean = true;
     const { email, password, confirmPassword } = registerUserPayload;
