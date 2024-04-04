@@ -22,6 +22,23 @@ describe('Payload validation for create new task route', () => {
 
     });
 
+    it('Should return a "title is not allowed to be empty" error', () => {
+
+      const taskPayload = {
+        title: '',
+        description: 'I have to finish the test suit',
+        type: 'Homework',
+        category: 'Graduation',
+        status: 'pending'
+      };
+
+      const error = TestUtils.validateObject(ValidateTask.createTaks(), taskPayload).error!.details[0]!;
+
+      expect(error.message).toMatch('"title" is not allowed to be empty');
+      expect(error.path).toStrictEqual(['title']);
+
+    });
+
     it('Should return a "title is required" error', () => {
 
       const taskPayload = {
