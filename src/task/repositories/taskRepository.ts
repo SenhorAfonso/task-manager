@@ -62,7 +62,7 @@ class TaskRepository {
     }
 
     if (APIUtils.isEmpty(result)) {
-      throw new NotFoundError('The user have no task registered');
+      throw new NotFoundError('The user have no task registered!');
     }
     return { success, status, message, result };
   }
