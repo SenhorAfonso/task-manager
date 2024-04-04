@@ -153,4 +153,13 @@ describe('Chech task\'s create route http responses', () => {
     expect(response.body.success).toBeFalsy();
   });
 
+  it('Should return 401 when the route is not authenticated', async () => {
+    const response = await request(server)
+      .get('/api/v1/task');
+
+    expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
+    expect(response.body.error.message).toBe('Unauthenticated!');
+    expect(response.body.success).toBeFalsy();
+  });
+
 });
