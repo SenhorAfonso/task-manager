@@ -1,5 +1,5 @@
 import ValidateCategory from '../../../category/validations/validateCategory';
-import TestUtils from '../../utils/testUtils';
+import TestUtils from '../../../utils/testUtils';
 
 describe('Payload validation for create new category route', () => {
 

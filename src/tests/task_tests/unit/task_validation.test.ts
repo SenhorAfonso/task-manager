@@ -1,5 +1,5 @@
 import ValidateTask from '../../../task/validations/validateTask';
-import TestUtils from '../../utils/testUtils';
+import TestUtils from '../../../utils/testUtils';
 
 describe('Payload validation for create new task route', () => {
 
