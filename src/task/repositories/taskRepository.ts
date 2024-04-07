@@ -108,7 +108,7 @@ class TaskRepository {
       throw new NotFoundError(`The id ${taskId._id} is not associated with any element!`);
     }
 
-    if (result.userID !== userID) {
+    if (APIUtils.userDontOwn(userID, result)) {
       throw new UnauthorizedAccessError('You do not have permissions to access this task!');
     }
 
