@@ -136,4 +136,26 @@ describe('Chech task\'s create route http responses', () => {
     expect(response.body.error.message).toBe('The format of the id invalid is invalid!');
   });
 
+  it('Should return 404 when the route is authenticated but the taskID is not associated to a register', async () => {
+    const fakeTaskId = '6611eccbd8916833bd4e4369';
+
+    const registerUserPayload = {
+      username: 'Pedro',
+      email: 'pedroafonso1@gmail.com',
+      weight: 75,
+      password: 'password123',
+      confirmPassword: 'password123'
+    };
+
+    const token = await TestUtils.loginUser(registerUserPayload);
+
+    const response = await request(server)
+      .get(`/api/v1/task/${fakeTaskId}`)
+      .auth(token, { type: 'bearer' });
+
+    expect(response.status).toBe(StatusCodes.NOT_FOUND);
+    expect(response.body.success).toBeFalsy();
+    expect(response.body.error.message).toBe(`The id ${fakeTaskId} is not associated with any element!`);
+  });
+
 });
