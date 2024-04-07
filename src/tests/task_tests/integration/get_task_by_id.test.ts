@@ -94,9 +94,46 @@ describe('Chech task\'s create route http responses', () => {
       .get(`/api/v1/task/${taskID}`)
       .auth(token, { type: 'bearer' });
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(StatusCodes.OK);
     expect(response.body.success).toBeTruthy();
     expect(response.body.message).toBe('Single task were retrieved!');
+  });
+
+  it('Should return 400 when the route is authenticated but the taskID format is invalid', async () => {
+    const registerUserPayload = {
+      username: 'Pedro',
+      email: 'pedroafonso1@gmail.com',
+      weight: 75,
+      password: 'password123',
+      confirmPassword: 'password123'
+    };
+
+    const token = await TestUtils.loginUser(registerUserPayload);
+
+    const createCategoryPayload = {
+      name: 'Graduation',
+      color: 'Red'
+    };
+
+    await TestUtils.createCategory(token, createCategoryPayload);
+
+    const createTaskPayload = {
+      title: 'Finish the homework',
+      description: 'The homework is the API',
+      type: 'Homework',
+      category: 'Graduation',
+      status: 'pending',
+    };
+
+    await TestUtils.creatTask(token, createTaskPayload);
+
+    const response = await request(server)
+      .get('/api/v1/task/invalid')
+      .auth(token, { type: 'bearer' });
+
+    expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+    expect(response.body.success).toBeFalsy();
+    expect(response.body.error.message).toBe('The format of the id invalid is invalid!');
   });
 
 });
