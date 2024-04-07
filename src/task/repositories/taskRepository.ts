@@ -117,7 +117,7 @@ class TaskRepository {
 
   static async updateTask(taskId: ITaskId, newTaskInfo: IUpdateTask, userID: string) {
     const status: number = StatusCodes.OK;
-    const message: string = 'Taks information were updated!';
+    const message: string = 'Task information were updated!';
     const success: boolean = true;
     const { category } = newTaskInfo;
 
@@ -131,7 +131,7 @@ class TaskRepository {
     }
 
     if (APIUtils.isEmpty(categoryDoc)) {
-      throw new NotFoundError(`The category ${newTaskInfo.category} is not registered!`);
+      throw new NotFoundError(`The category "${newTaskInfo.category}" is not registered!`);
     }
 
     const categoryID = categoryDoc!.id;
@@ -141,14 +141,14 @@ class TaskRepository {
       result = await taskSchema.findOne(taskId);
     } catch (error) {
       if (error instanceof mongoose.Error.CastError) {
-        throw new BadRequestError(`The format of the id ${taskId._id} is invalid!`);
+        throw new BadRequestError(`The format of the id "${taskId._id}" is invalid!`);
       } else {
         throw new InternalServerError('A unknown error ocurred during searching the task by id to update. Please try again later.');
       }
     }
 
     if (!result) {
-      throw new NotFoundError(`The id ${taskId._id} is not associated with any element!`);
+      throw new NotFoundError(`The id "${taskId._id}" is not associated with any element!`);
     }
 
     if (APIUtils.userDontOwn(userID, result)) {
