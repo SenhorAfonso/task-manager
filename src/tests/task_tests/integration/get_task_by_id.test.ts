@@ -158,4 +158,50 @@ describe('Chech task\'s create route http responses', () => {
     expect(response.body.error.message).toBe(`The id ${fakeTaskId} is not associated with any element!`);
   });
 
+  it('Should return 401 when the route is authenticated but the userID\'s task is not the same of the user logged in', async () => {
+    const registerUser1Payload = {
+      username: 'Pedro',
+      email: 'pedroafonso1@gmail.com',
+      weight: 75,
+      password: 'password123',
+      confirmPassword: 'password123'
+    };
+
+    const registerUser2Payload = {
+      username: 'Pedro',
+      email: 'pedroafonso2@gmail.com',
+      weight: 75,
+      password: 'password123',
+      confirmPassword: 'password123'
+    };
+
+    const tokenUser1 = await TestUtils.loginUser(registerUser1Payload);
+    const tokenUser2 = await TestUtils.loginUser(registerUser2Payload);
+
+    const createCategoryPayload = {
+      name: 'Graduation',
+      color: 'Red'
+    };
+
+    await TestUtils.createCategory(tokenUser1, createCategoryPayload);
+
+    const createTaskPayload = {
+      title: 'Finish the homework',
+      description: 'The homework is the API',
+      type: 'Homework',
+      category: 'Graduation',
+      status: 'pending',
+    };
+
+    const taskID = await TestUtils.creatTask(tokenUser1, createTaskPayload);
+
+    const response = await request(server)
+      .get(`/api/v1/task/${taskID}`)
+      .auth(tokenUser2, { type: 'bearer' });
+
+    expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
+    expect(response.body.success).toBeFalsy();
+    expect(response.body.error.message).toBe('You do not have permissions to access this task!');
+  });
+
 });
