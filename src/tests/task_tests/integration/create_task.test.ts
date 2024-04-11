@@ -4,18 +4,25 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 import taskSchema from '../../../task/schema/taskSchema';
 import server from '../../../server';
+import categorySchema from '../../../category/schema/categorySchema';
+import userSchema from '../../../user/schema/userSchema';
 
 let mongoServer: MongoMemoryServer;
 
 describe('Chech task\'s create route http responses', () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const mongoURI = mongoServer.getUri();
-    mongoose.connect(mongoURI);
+    await mongoose.connect(mongoURI);
   });
 
   afterEach(async () => {
-    await taskSchema.collection.drop();
+    await userSchema.collection.deleteMany({});
+    await categorySchema.collection.deleteMany({});
+    await taskSchema.collection.deleteMany({});
+  });
+
+  afterAll(async () => {
     await mongoServer.stop();
     await mongoose.connection.close();
   });
