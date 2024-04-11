@@ -11,16 +11,19 @@ import categorySchema from '../../../category/schema/categorySchema';
 let mongoServer: MongoMemoryServer;
 
 describe('Chech task\'s create route http responses', () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const mongoURI = mongoServer.getUri();
-    mongoose.connect(mongoURI);
+    await mongoose.connect(mongoURI);
   });
 
   afterEach(async () => {
-    await userSchema.collection.drop();
-    await categorySchema.collection.drop();
-    await taskSchema.collection.drop();
+    await userSchema.collection.deleteMany({});
+    await categorySchema.collection.deleteMany({});
+    await taskSchema.collection.deleteMany({});
+  });
+
+  afterAll(async () => {
     await mongoServer.stop();
     await mongoose.connection.close();
   });
