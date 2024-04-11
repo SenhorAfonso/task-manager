@@ -11,16 +11,19 @@ import categorySchema from '../../../category/schema/categorySchema';
 let mongoServer: MongoMemoryServer;
 
 describe('Chech task\'s update route http responses', () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const mongoURI = mongoServer.getUri();
-    mongoose.connect(mongoURI);
+    await mongoose.connect(mongoURI);
   });
 
   afterEach(async () => {
     await userSchema.collection.drop();
     await categorySchema.collection.drop();
     await taskSchema.collection.drop();
+  });
+
+  afterAll(async () => {
     await mongoServer.stop();
     await mongoose.connection.close();
   });
@@ -261,7 +264,7 @@ describe('Chech task\'s update route http responses', () => {
 
   });
 
-  it('Should return 401 when the route is authenticated but the userID\'s task is not the same of the user logged in', async () => {
+  it('Should return 401 when the route is authenticated but the user do not own the task', async () => {
     const registerUser1Payload = {
       username: 'Pedro',
       email: 'pedroafonso1@gmail.com',
