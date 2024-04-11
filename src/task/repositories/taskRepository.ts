@@ -175,14 +175,14 @@ class TaskRepository {
       result = await taskSchema.findById(taskId);
     } catch (error) {
       if (error instanceof mongoose.Error.CastError) {
-        throw new BadRequestError(`The format of the id ${taskId._id} is invalid!`);
+        throw new BadRequestError(`The format of the id "${taskId._id}" is invalid!`);
       } else {
         throw new InternalServerError('A unknown error ocurred during searching the category by id to delete. Please try again later.');
       }
     }
 
     if (!result) {
-      throw new NotFoundError(`The id ${taskId._id} is not associated with any element!`);
+      throw new NotFoundError(`The id "${taskId._id}" is not associated with any element!`);
     }
 
     if (APIUtils.userDontOwn(userID, result)) {
