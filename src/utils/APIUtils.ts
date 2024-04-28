@@ -33,7 +33,7 @@ class APIUtils {
   }
 
   static createCustomFilter(status: string) {
-    return function(task: taskDocument) {
+    return function filter(task: taskDocument) {
       return task.status === status;
     };
   }
