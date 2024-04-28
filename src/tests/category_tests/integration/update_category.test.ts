@@ -7,6 +7,7 @@ import server from '../../../server';
 import userSchema from '../../../user/schema/userSchema';
 import categorySchema from '../../../category/schema/categorySchema';
 import serverConfig from '../../../config/config';
+import TestUtils from '../../../utils/testUtils';
 
 let mongoServer: MongoMemoryServer;
 let mongoURI: string;
@@ -36,14 +37,9 @@ describe('Chech task\'s update route http responses', () => {
       color: 'Red'
     };
 
-    let response = await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload)
-      .auth(token, { type: 'bearer'} );
+    const categoryId = await TestUtils.createCategory(token, createCategoryPayload);
 
-    const categoryId = response.body.result._id;
-
-    response = await request(server)
+    const response = await request(server)
       .put(`/api/v1/category/${categoryId}`)
       .send(createCategoryPayload);
 
@@ -59,11 +55,6 @@ describe('Chech task\'s update route http responses', () => {
       name: 'Graduation',
       color: 'Red'
     };
-
-    await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload)
-      .auth(token, { type: 'bearer' });
 
     const response = await request(server)
       .put('/api/v1/category/invalid')
@@ -105,15 +96,10 @@ describe('Chech task\'s update route http responses', () => {
       color: 'Red'
     };
 
-    const categoryUser1 = await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload)
-      .auth(tokenUser1, { type: 'bearer' });
-
-    const taskUser1Id = categoryUser1.body.result._id;
+    const categoryUser1Id = await TestUtils.createCategory(tokenUser1, createCategoryPayload);
 
     const response = await request(server)
-      .put(`/api/v1/category/${taskUser1Id}`)
+      .put(`/api/v1/category/${categoryUser1Id}`)
       .send(createCategoryPayload)
       .auth(tokenUser2, { type: 'bearer' });
 
@@ -131,15 +117,10 @@ describe('Chech task\'s update route http responses', () => {
       color: 'Red'
     };
 
-    const taskResponse = await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload)
-      .auth(token, { type: 'bearer' });
-
-    const taskId = taskResponse.body.result._id;
+    const categoryId = await TestUtils.createCategory(token, createCategoryPayload);
 
     const response = await request(server)
-      .put(`/api/v1/category/${taskId}`)
+      .put(`/api/v1/category/${categoryId}`)
       .send(createCategoryPayload)
       .auth(token, { type: 'bearer' });
 
