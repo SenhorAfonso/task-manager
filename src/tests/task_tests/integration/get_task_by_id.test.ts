@@ -31,15 +31,7 @@ describe('Chech task\'s create route http responses', () => {
   });
 
   it('Should return 401 when the route is not authenticated', async () => {
-    const registerUserPayload = {
-      username: 'Pedro',
-      email: 'pedroafonso@gmail.com',
-      weight: 75,
-      password: 'password123',
-      confirmPassword: 'password123'
-    };
-
-    const token = await TestUtils.loginUser(registerUserPayload);
+    const token = serverConfig.TEST_TOKEN_1!;
 
     const createCategoryPayload = {
       name: 'Graduation',
@@ -68,15 +60,7 @@ describe('Chech task\'s create route http responses', () => {
   });
 
   it('Should return 200 when the route is authenticated and there is at least one task registered', async () => {
-    const registerUserPayload = {
-      username: 'Pedro',
-      email: 'pedroafonso1@gmail.com',
-      weight: 75,
-      password: 'password123',
-      confirmPassword: 'password123'
-    };
-
-    const token = await TestUtils.loginUser(registerUserPayload);
+    const token = serverConfig.TEST_TOKEN_1!;
 
     const createCategoryPayload = {
       name: 'Graduation',
@@ -105,15 +89,7 @@ describe('Chech task\'s create route http responses', () => {
   });
 
   it('Should return 400 when the route is authenticated but the taskID format is invalid', async () => {
-    const registerUserPayload = {
-      username: 'Pedro',
-      email: 'pedroafonso1@gmail.com',
-      weight: 75,
-      password: 'password123',
-      confirmPassword: 'password123'
-    };
-
-    const token = await TestUtils.loginUser(registerUserPayload);
+    const token = serverConfig.TEST_TOKEN_1!;
 
     const createCategoryPayload = {
       name: 'Graduation',
@@ -143,16 +119,7 @@ describe('Chech task\'s create route http responses', () => {
 
   it('Should return 404 when the route is authenticated but the taskID is not associated to a register', async () => {
     const fakeTaskId = '6611eccbd8916833bd4e4369';
-
-    const registerUserPayload = {
-      username: 'Pedro',
-      email: 'pedroafonso1@gmail.com',
-      weight: 75,
-      password: 'password123',
-      confirmPassword: 'password123'
-    };
-
-    const token = await TestUtils.loginUser(registerUserPayload);
+    const token = serverConfig.TEST_TOKEN_1!;
 
     const response = await request(server)
       .get(`/api/v1/task/${fakeTaskId}`)
@@ -164,24 +131,8 @@ describe('Chech task\'s create route http responses', () => {
   });
 
   it('Should return 401 when the route is authenticated but the userID\'s task is not the same of the user logged in', async () => {
-    const registerUser1Payload = {
-      username: 'Pedro',
-      email: 'pedroafonso1@gmail.com',
-      weight: 75,
-      password: 'password123',
-      confirmPassword: 'password123'
-    };
-
-    const registerUser2Payload = {
-      username: 'Pedro',
-      email: 'pedroafonso2@gmail.com',
-      weight: 75,
-      password: 'password123',
-      confirmPassword: 'password123'
-    };
-
-    const tokenUser1 = await TestUtils.loginUser(registerUser1Payload);
-    const tokenUser2 = await TestUtils.loginUser(registerUser2Payload);
+    const tokenUser1 = serverConfig.TEST_TOKEN_1!;
+    const tokenUser2 = serverConfig.TEST_TOKEN_2!;
 
     const createCategoryPayload = {
       name: 'Graduation',
