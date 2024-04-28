@@ -5,6 +5,7 @@ import request from 'supertest';
 import server from '../../../server';
 import categorySchema from '../../../category/schema/categorySchema';
 import serverConfig from '../../../config/config';
+import TestUtils from '../../../utils/testUtils';
 
 let mongoServer: MongoMemoryServer;
 let mongoURI: string;
@@ -47,15 +48,8 @@ describe('Chech task\'s update route http responses', () => {
       color: 'Red'
     };
 
-    await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload1)
-      .auth(token, { type: 'bearer' });
-
-    await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload2)
-      .auth(token, { type: 'bearer' });
+    await TestUtils.createCategory(token, createCategoryPayload1);
+    await TestUtils.createCategory(token, createCategoryPayload2);
 
     const response = await request(server)
       .get('/api/v1/category')
