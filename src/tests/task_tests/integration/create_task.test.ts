@@ -6,13 +6,15 @@ import taskSchema from '../../../task/schema/taskSchema';
 import server from '../../../server';
 import categorySchema from '../../../category/schema/categorySchema';
 import userSchema from '../../../user/schema/userSchema';
+import serverConfig from '../../../config/config';
 
 let mongoServer: MongoMemoryServer;
+let mongoURI: string;
 
 describe('Chech task\'s create route http responses', () => {
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
-    const mongoURI = mongoServer.getUri();
+    mongoURI = mongoServer.getUri();
     await mongoose.connect(mongoURI);
   });
 
@@ -48,6 +50,15 @@ describe('Chech task\'s create route http responses', () => {
     const response = await request(server)
       .post('/api/v1/task')
       .send(createTaskPayload);
+
+    expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
+    expect(response.body.error.message).toBe('Unauthenticated!');
+    expect(response.body.success).toBeFalsy();
+  });
+  it('Should return 401 when the token is invalid', async () => {
+    const response = await request(server)
+      .post('/api/v1/task')
+      .auth('Bearer invalid', { type: 'bearer' });
 
     expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
     expect(response.body.error.message).toBe('Unauthenticated!');
@@ -146,6 +157,30 @@ describe('Chech task\'s create route http responses', () => {
     expect(response.status).toBe(StatusCodes.NOT_FOUND);
     expect(response.body.error.message).toBe('The category do not exist!');
     expect(response.body.success).toBeFalsy();
+  });
+
+  it('Should return 500 when the database is not connected', async () => {
+    await mongoose.connection.close();
+    const token = serverConfig.TEST_TOKEN_1!;
+
+    const createTaskPayload = {
+      title: 'Finish the homework',
+      description: 'The homework is the API',
+      type: 'Homework',
+      category: 'Graduation',
+      status: 'pending'
+    };
+
+    const response = await request(server)
+      .post('/api/v1/task')
+      .send(createTaskPayload)
+      .auth(token, { type: 'bearer' });
+
+    await mongoose.connect(mongoURI);
+    expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+    expect(response.body.error.message).toBe('An internal server error ocurred. Please try again later.');
+    expect(response.body.success).toBeFalsy();
+
   });
 
 });
