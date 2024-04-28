@@ -7,6 +7,7 @@ import taskSchema from '../../../task/schema/taskSchema';
 import userSchema from '../../../user/schema/userSchema';
 import server from '../../../server';
 import serverConfig from '../../../config/config';
+import TestUtils from '../../../utils/testUtils';
 
 let mongoServer: MongoMemoryServer;
 let mongoURI: string;
@@ -108,10 +109,7 @@ describe('Chech task\'s get all tasks by array route http responses', () => {
       color: 'Red'
     };
 
-    await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload)
-      .auth(token, { type: 'bearer' });
+    await TestUtils.createCategory(token, createCategoryPayload);
 
     const createTaskPayload = {
       title: 'Finish the homework',
@@ -151,15 +149,8 @@ describe('Chech task\'s get all tasks by array route http responses', () => {
       color: 'Yellow'
     };
 
-    await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload1)
-      .auth(token, { type: 'bearer' });
-
-    await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload2)
-      .auth(token, { type: 'bearer' });
+    await TestUtils.createCategory(token, createCategoryPayload1);
+    await TestUtils.createCategory(token, createCategoryPayload2);
 
     const createTaskPayload1 = {
       title: 'Finish the homework',
@@ -177,19 +168,8 @@ describe('Chech task\'s get all tasks by array route http responses', () => {
       status: 'finished'
     };
 
-    await request(server)
-      .post('/api/v1/task')
-      .send(createTaskPayload1)
-      .auth(token, { type: 'bearer' });
-
-    await request(server)
-      .post('/api/v1/task')
-      .send(createTaskPayload2)
-      .auth(token, { type: 'bearer' });
-
-    await request(server)
-      .get('/api/v1/task')
-      .auth(token, { type: 'bearer' });
+    await TestUtils.creatTask(token, createTaskPayload1);
+    await TestUtils.creatTask(token, createTaskPayload2);
 
     const response = await request(server)
       .get('/api/v1/task-array')
@@ -217,15 +197,8 @@ describe('Chech task\'s get all tasks by array route http responses', () => {
       color: 'Yellow'
     };
 
-    await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload1)
-      .auth(token, { type: 'bearer' });
-
-    await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload2)
-      .auth(token, { type: 'bearer' });
+    await TestUtils.createCategory(token, createCategoryPayload1);
+    await TestUtils.createCategory(token, createCategoryPayload2);
 
     const createTaskPayload1 = {
       title: 'Finish the homework',
@@ -243,15 +216,8 @@ describe('Chech task\'s get all tasks by array route http responses', () => {
       status: 'finished'
     };
 
-    await request(server)
-      .post('/api/v1/task')
-      .send(createTaskPayload1)
-      .auth(token, { type: 'bearer' });
-
-    await request(server)
-      .post('/api/v1/task')
-      .send(createTaskPayload2)
-      .auth(token, { type: 'bearer' });
+    await TestUtils.creatTask(token, createTaskPayload1);
+    await TestUtils.creatTask(token, createTaskPayload2);
 
     await request(server)
       .get('/api/v1/task')
