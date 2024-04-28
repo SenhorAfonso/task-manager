@@ -185,7 +185,8 @@ describe('Chech task\'s get all tasks by array route http responses', () => {
 
   it('should return an array only with the task with "conclusion-date" field equal to query', async () => {
     const token = serverConfig.TEST_TOKEN_1!;
-    const conclusionDate = (new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30))).toLocaleDateString();
+    const thirtDays = 2592e6;
+    const conclusionDate = (new Date(new Date().getTime() + thirtDays)).toLocaleDateString();
 
     const createCategoryPayload1 = {
       name: 'Graduation',
