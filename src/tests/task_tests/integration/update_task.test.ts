@@ -7,20 +7,22 @@ import server from '../../../server';
 import TestUtils from '../../../utils/testUtils';
 import userSchema from '../../../user/schema/userSchema';
 import categorySchema from '../../../category/schema/categorySchema';
+import serverConfig from '../../../config/config';
 
 let mongoServer: MongoMemoryServer;
+let mongoURI: string;
 
 describe('Chech task\'s update route http responses', () => {
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
-    const mongoURI = mongoServer.getUri();
+    mongoURI = mongoServer.getUri();
     await mongoose.connect(mongoURI);
   });
 
   afterEach(async () => {
-    await userSchema.collection.drop();
-    await categorySchema.collection.drop();
-    await taskSchema.collection.drop();
+    await userSchema.collection.deleteMany({});
+    await categorySchema.collection.deleteMany({});
+    await taskSchema.collection.deleteMany({});
   });
 
   afterAll(async () => {
@@ -317,6 +319,30 @@ describe('Chech task\'s update route http responses', () => {
     expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
     expect(response.body.success).toBeFalsy();
     expect(response.body.error.message).toBe('You do not have permissions to update this task!');
+
+  });
+
+  it('Should return 500 when the database is not connected', async () => {
+    await mongoose.connection.close();
+    const token = serverConfig.TEST_TOKEN_1!;
+
+    const payload = {
+      title: 'incorrect title',
+      description: 'incorrect description',
+      type: 'incorrect type',
+      category: 'Graduation',
+      status: 'pending',
+    };
+
+    const response = await request(server)
+      .put('/api/v1/task/6611eccbd8916833bd4e4369')
+      .send(payload)
+      .auth(token, { type: 'bearer' });
+
+    await mongoose.connect(mongoURI);
+    expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+    expect(response.body.error.message).toBe('An internal server error ocurred. Please try again later.');
+    expect(response.body.success).toBeFalsy();
 
   });
 
