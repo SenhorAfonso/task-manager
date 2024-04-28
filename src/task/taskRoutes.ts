@@ -21,7 +21,7 @@ taskRouter.get('/task-array', [
 
 taskRouter.get('/task-info', [
   AuthenticationMiddleware.AuthenticateToken
-], TaskController.getTaskByArray);
+], TaskController.getTaskInfo);
 
 taskRouter.get('/task-aggregate', [
   AuthenticationMiddleware.AuthenticateToken
