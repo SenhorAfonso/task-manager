@@ -7,6 +7,7 @@ import server from '../../../server';
 import userSchema from '../../../user/schema/userSchema';
 import categorySchema from '../../../category/schema/categorySchema';
 import serverConfig from '../../../config/config';
+import TestUtils from '../../../utils/testUtils';
 
 let mongoServer: MongoMemoryServer;
 let mongoURI: string;
@@ -65,10 +66,7 @@ describe('Chech task\'s delete route http responses', () => {
       color: 'Red'
     };
 
-    await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload)
-      .auth(tokenUser1, { type: 'bearer' });
+    await TestUtils.createCategory(tokenUser1, createCategoryPayload);
 
     const createTaskPayload = {
       title: 'Finish the homework',
@@ -102,10 +100,7 @@ describe('Chech task\'s delete route http responses', () => {
       color: 'Red'
     };
 
-    await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload)
-      .auth(token, { type: 'bearer' });
+    await TestUtils.createCategory(token, createCategoryPayload);
 
     const createTaskPayload = {
       title: 'Finish the homework',
@@ -139,10 +134,7 @@ describe('Chech task\'s delete route http responses', () => {
       color: 'Red'
     };
 
-    await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload)
-      .auth(token, { type: 'bearer' });
+    await TestUtils.createCategory(token, createCategoryPayload);
 
     const createTaskPayload = {
       title: 'Finish the homework',
