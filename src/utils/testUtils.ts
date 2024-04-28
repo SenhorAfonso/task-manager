@@ -15,6 +15,7 @@ class TestUtils {
 
   static async loginUser(payload: IRegisterNewUser): Promise<string> {
     const { email, password } = payload;
+    let token: string = '';
 
     await request(server)
       .post('/api/v1/user/signup')
@@ -24,7 +25,8 @@ class TestUtils {
       .post('/api/v1/user/login')
       .send({ email, password });
 
-    const { token } = response.body.data;
+    ({ token } = response.body.data);
+
     return token;
   }
 
