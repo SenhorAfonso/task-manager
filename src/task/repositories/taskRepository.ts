@@ -23,13 +23,12 @@ class TaskRepository {
     const success: boolean = true;
     const { category } = createTaskPayload;
 
-    let result: nullable<mongoDocument>;
     let categoryDoc: nullable<mongoDocument>;
 
     try {
       categoryDoc = await categorySchema.findOne({ name: category });
     } catch (error) {
-      throw new InternalServerError('A unknown error ocurred during searching the category by name. Please try again later.');
+      throw new InternalServerError('An internal server error ocurred. Please try again later.');
     }
 
     if (!categoryDoc) {
@@ -39,11 +38,7 @@ class TaskRepository {
     const categoryID = categoryDoc.id;
     createTaskPayload.categoryID = categoryID;
 
-    try {
-      result = await taskSchema.create(createTaskPayload);
-    } catch (error) {
-      throw new InternalServerError('A unknown error ocurred during creating a new task. Please try again later.');
-    }
+    const result = await taskSchema.create(createTaskPayload);
 
     return { success, status, message, result };
   }
@@ -58,7 +53,7 @@ class TaskRepository {
     try {
       result = await taskSchema.find({ userID });
     } catch (error) {
-      throw new InternalServerError('A unknown error ocurred during searching for all tasks. Please try again later.');
+      throw new InternalServerError('An internal server error ocurred. Please try again later.');
     }
 
     if (APIUtils.isEmpty(result)) {
@@ -68,20 +63,10 @@ class TaskRepository {
   }
 
   static async getCategoryID(name: string): Promise<string|undefined> {
-    if (!name) {
-      return;
-    }
-
-    let categoryDoc: nullable<mongoDocument>;
-
-    try {
-      categoryDoc = await categorySchema.findOne({ name });
-    } catch (error) {
-      throw new InternalServerError('A unknown error ocurred during searching for category name. Please try again later.');
-    }
+    const categoryDoc = await categorySchema.findOne({ name });
 
     if (APIUtils.isEmpty(categoryDoc)) {
-      throw new NotFoundError(`The category ${name} does not exist!`);
+      throw new NotFoundError(`The category "${name}" does not exist!`);
     }
 
     return categoryDoc!.id;
@@ -100,7 +85,7 @@ class TaskRepository {
       if (error instanceof mongoose.Error.CastError) {
         throw new BadRequestError(`The format of the id ${taskId._id} is invalid!`);
       } else {
-        throw new InternalServerError('A unknown error ocurred during searching the task by id. Please try again later.');
+        throw new InternalServerError('An internal server error ocurred. Please try again later.');
       }
     }
 
@@ -127,7 +112,7 @@ class TaskRepository {
     try {
       categoryDoc = await categorySchema.findOne({ name: category });
     } catch (error) {
-      throw new InternalServerError();
+      throw new InternalServerError('An internal server error ocurred. Please try again later.');
     }
 
     if (APIUtils.isEmpty(categoryDoc)) {
@@ -140,11 +125,7 @@ class TaskRepository {
     try {
       result = await taskSchema.findOne(taskId);
     } catch (error) {
-      if (error instanceof mongoose.Error.CastError) {
-        throw new BadRequestError(`The format of the id "${taskId._id}" is invalid!`);
-      } else {
-        throw new InternalServerError('A unknown error ocurred during searching the task by id to update. Please try again later.');
-      }
+      throw new BadRequestError(`The format of the id "${taskId._id}" is invalid!`);
     }
 
     if (!result) {
@@ -155,11 +136,7 @@ class TaskRepository {
       throw new UnauthorizedAccessError('You do not have permissions to update this task!');
     }
 
-    try {
-      result = await taskSchema.findByIdAndUpdate(taskId, newTaskInfo, { new: true });
-    } catch (error) {
-      throw new InternalServerError('A unknown error ocurred during task update. Please try again later');
-    }
+    result = await taskSchema.findByIdAndUpdate(taskId, newTaskInfo, { new: true });
 
     return { success, status, message, result };
   }
@@ -177,7 +154,7 @@ class TaskRepository {
       if (error instanceof mongoose.Error.CastError) {
         throw new BadRequestError(`The format of the id "${taskId._id}" is invalid!`);
       } else {
-        throw new InternalServerError('A unknown error ocurred during searching the category by id to delete. Please try again later.');
+        throw new InternalServerError('An internal server error ocurred. Please try again later.');
       }
     }
 
@@ -189,11 +166,7 @@ class TaskRepository {
       throw new UnauthorizedAccessError('You do not have permissions to delete this task!');
     }
 
-    try {
-      await taskSchema.findByIdAndDelete(taskId);
-    } catch (error) {
-      throw new InternalServerError('A unknown error ocurred during task delete. Please try again later');
-    }
+    await taskSchema.findByIdAndDelete(taskId);
 
     return { success, status, message, result };
   }
