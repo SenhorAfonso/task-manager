@@ -10,7 +10,8 @@ class TaskService {
 
   static createTask(createTaskPayload: createTask) {
     const now = new Date();
-    const conclusion = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 30));
+    const thirtDays = 2592e6;
+    const conclusion = new Date(now.getTime() + thirtDays);
 
     createTaskPayload.date_creation = now;
     createTaskPayload.date_conclusion = conclusion;
