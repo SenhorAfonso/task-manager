@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "nodemon dist/app.js",
     "lint": "eslint ./src/",
-    "test:dev": "npx jest src/tests/ --watch --detectOpenHandles",
-    "test": "npx jest src/tests/ --detectOpenHandles",
-    "test:coverage": "npx jest src/tests/ --coverage"
+    "test:dev": "npx jest src/tests/ --watch --detectOpenHandles --runInBand",
+    "test": "npx jest src/tests/ --detectOpenHandles --runInBand",
+    "test:coverage": "npx jest src/tests/ --coverage --runInBand --detectOpenHandles"
   },
   "keywords": [],
   "author": "",
