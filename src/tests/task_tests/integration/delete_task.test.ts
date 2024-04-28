@@ -9,11 +9,12 @@ import categorySchema from '../../../category/schema/categorySchema';
 import serverConfig from '../../../config/config';
 
 let mongoServer: MongoMemoryServer;
+let mongoURI: string;
 
 describe('Chech task\'s delete route http responses', () => {
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
-    const mongoURI = mongoServer.getUri();
+    mongoURI = mongoServer.getUri();
     await mongoose.connect(mongoURI);
   });
 
@@ -164,6 +165,21 @@ describe('Chech task\'s delete route http responses', () => {
     expect(response.status).toBe(StatusCodes.OK);
     expect(response.body.success).toBeTruthy();
     expect(response.body.message).toBe('Task were succesfully deleted!');
+
+  });
+
+  it('Should return 500 when the database is not connected', async () => {
+    await mongoose.connection.close();
+    const token = serverConfig.TEST_TOKEN_1!;
+
+    const response = await request(server)
+      .delete('/api/v1/task/6611eccbd8916833bd4e4369')
+      .auth(token, { type: 'bearer' });
+
+    await mongoose.connect(mongoURI);
+    expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+    expect(response.body.error.message).toBe('An internal server error ocurred. Please try again later.');
+    expect(response.body.success).toBeFalsy();
 
   });
 
