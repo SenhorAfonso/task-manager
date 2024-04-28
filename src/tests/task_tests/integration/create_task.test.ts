@@ -7,6 +7,7 @@ import server from '../../../server';
 import categorySchema from '../../../category/schema/categorySchema';
 import userSchema from '../../../user/schema/userSchema';
 import serverConfig from '../../../config/config';
+import TestUtils from '../../../utils/testUtils';
 
 let mongoServer: MongoMemoryServer;
 let mongoURI: string;
@@ -66,38 +67,14 @@ describe('Chech task\'s create route http responses', () => {
   });
 
   it('Should return 201 when the payload is valid', async () => {
-    const userSignUpPayload = {
-      username: 'Pedro',
-      email: 'pedroafonso@gmail.com',
-      weight: 75,
-      password: 'password123',
-      confirmPassword: 'password123'
-    };
-
-    await request(server)
-      .post('/api/v1/user/signup')
-      .send(userSignUpPayload);
-
-    const userLoginPayload = {
-      email: 'pedroafonso@gmail.com',
-      password: 'password123'
-    };
-
-    const loginResponse = await request(server)
-      .post('/api/v1/user/login')
-      .send(userLoginPayload);
-
-    const { token } = loginResponse.body.data;
+    const token = serverConfig.TEST_TOKEN_1!;
 
     const createCategoryPayload = {
       name: 'Graduation',
       color: 'Red'
     };
 
-    await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload)
-      .auth(token, { type: 'bearer' });
+    await TestUtils.createCategory(token, createCategoryPayload);
 
     const createTaskPayload = {
       title: 'Finish the homework',
@@ -118,28 +95,7 @@ describe('Chech task\'s create route http responses', () => {
   });
 
   it('Should return 404 when the category do not exist', async () => {
-    const userSignUpPayload = {
-      username: 'Pedro',
-      email: 'pedroafonso@gmail.com',
-      weight: 75,
-      password: 'password123',
-      confirmPassword: 'password123'
-    };
-
-    await request(server)
-      .post('/api/v1/user/signup')
-      .send(userSignUpPayload);
-
-    const userLoginPayload = {
-      email: 'pedroafonso@gmail.com',
-      password: 'password123'
-    };
-
-    const loginResponse = await request(server)
-      .post('/api/v1/user/login')
-      .send(userLoginPayload);
-
-    const { token } = loginResponse.body.data;
+    const token = serverConfig.TEST_TOKEN_1!;
 
     const createTaskPayload = {
       title: 'Finish the homework',
