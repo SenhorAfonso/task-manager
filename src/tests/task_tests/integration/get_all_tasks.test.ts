@@ -6,13 +6,15 @@ import taskSchema from '../../../task/schema/taskSchema';
 import server from '../../../server';
 import categorySchema from '../../../category/schema/categorySchema';
 import userSchema from '../../../user/schema/userSchema';
+import serverConfig from '../../../config/config';
 
 let mongoServer: MongoMemoryServer;
+let mongoURI: string;
 
 describe('Chech task\'s create route http responses', () => {
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
-    const mongoURI = mongoServer.getUri();
+    mongoURI = mongoServer.getUri();
     await mongoose.connect(mongoURI);
   });
 
@@ -167,6 +169,21 @@ describe('Chech task\'s create route http responses', () => {
     expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
     expect(response.body.error.message).toBe('Unauthenticated!');
     expect(response.body.success).toBeFalsy();
+  });
+
+  it('Should return 500 when the database is not connected', async () => {
+    await mongoose.connection.close();
+    const token = serverConfig.TEST_TOKEN_1!;
+
+    const response = await request(server)
+      .get('/api/v1/task-array')
+      .auth(token, { type: 'bearer' });
+
+    await mongoose.connect(mongoURI);
+    expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+    expect(response.body.error.message).toBe('An internal server error ocurred. Please try again later.');
+    expect(response.body.success).toBeFalsy();
+
   });
 
 });
