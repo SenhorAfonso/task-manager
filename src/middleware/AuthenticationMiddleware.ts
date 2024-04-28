@@ -25,7 +25,7 @@ class AuthenticationMiddleware{
       req.user = { userID };
       next();
     } catch (error) {
-      throw new Error('Unauthenticated!');
+      throw new UnauthorizedAccessError('Unauthenticated!');
     }
 
   }

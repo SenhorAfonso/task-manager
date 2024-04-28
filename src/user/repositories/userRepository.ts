@@ -15,7 +15,7 @@ import type mongoDocument from '../../types/mongoDocument';
 class UserRepository {
 
   static async registerUser(registerUserPayload: IRegisterNewUser) {
-    const status: number = StatusCodes.OK;
+    const status: number = StatusCodes.CREATED;
     const message: string = 'User successfully registered!';
     const success: boolean = true;
     const { email, password, confirmPassword } = registerUserPayload;
@@ -25,7 +25,7 @@ class UserRepository {
     try {
       result = await userSchema.findOne({ email });
     } catch (error) {
-      throw new InternalServerError('A unknown error ocurred during searching for duplicated user email. Please try again later');
+      throw new InternalServerError('An internal server error ocurred. Please try again later.');
     }
 
     if (result) {
@@ -36,11 +36,7 @@ class UserRepository {
       throw new BadRequestError('The passwords do not match!');
     }
 
-    try {
-      result = await userSchema.create(registerUserPayload);
-    } catch (error) {
-      throw new InternalServerError('A unknown error ocurred during user registration. Please try again later');
-    }
+    result = await userSchema.create(registerUserPayload);
 
     return { success, message, status, result };
   }
@@ -56,7 +52,7 @@ class UserRepository {
     try {
       user = await userSchema.findOne({ email });
     } catch (error) {
-      throw new InternalServerError('A unknown error ocurred during searching user email. Please try again later');
+      throw new InternalServerError('An internal server error ocurred. Please try again later.');
     }
 
     if(APIUtils.isEmpty(user)) {
@@ -66,7 +62,7 @@ class UserRepository {
     const hashedPassword = user!.password!;
 
     if (UserUtils.passwordIsIncorrect(password, hashedPassword)) {
-      throw new BadRequestError('The password is incorrect!');
+      throw new BadRequestError('The email or password is incorrect!');
     }
 
     return { success, message, status, user };

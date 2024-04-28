@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "nodemon dist/app.js",
     "lint": "eslint ./src/",
-    "test": "npx jest src/tests/ --detectOpenHandles",
-    "test:coverage": "npx jest src/tests/ --coverage"
+    "test:dev": "npx jest src/tests/ --watch --detectOpenHandles --runInBand",
+    "test": "npx jest src/tests/ --detectOpenHandles --runInBand",
+    "test:coverage": "npx jest src/tests/ --coverage --runInBand --detectOpenHandles"
   },
   "keywords": [],
   "author": "",
@@ -31,7 +32,6 @@
     "jest": "^29.7.0",
     "nodemon": "^3.1.0",
     "prettier": "^3.2.5",
-    "supertest": "^6.3.4",
     "ts-jest": "^29.1.2",
     "typescript": "^5.4.3"
   },
@@ -47,6 +47,8 @@
     "http-status-codes": "^2.3.0",
     "joi": "^17.12.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.2.2"
+    "mongoose": "^8.2.2",
+    "mongodb-memory-server": "^9.1.8",
+    "supertest": "^6.3.4"
   }
 }

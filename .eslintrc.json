@@ -99,7 +99,8 @@
     {
       "files": ["taskService.ts"],
       "rules": {
-        "prefer-const":"off"
+        "prefer-const":"off",
+        "no-magic-numbers": "off"
       }
     },
     {
@@ -135,6 +136,27 @@
       "files": ["validateUser.ts"],
       "rules": {
         "require-unicode-regexp":"off"
+      }
+    },
+    {
+      "files": [
+        "task_validation.test.ts",
+        "delete_task.test.ts",
+        "get_all_categories.test.ts",
+        "aggregate_task.test.ts",
+        "get_all_tasks.test.ts",
+        "get_task_info.test.ts",
+        "sign_up_user.test.ts",
+        "sign_in_login.test.ts",
+        "testUtils.ts",
+        "get_all_array.test.ts"
+      ],
+      "rules": {
+        "max-lines": "off",
+        "no-underscore-dangle":"off",
+        "no-magic-numbers":"off",
+        "@typescript-eslint/no-magic-numbers": "off"
+
       }
     }
   ]

@@ -20,8 +20,6 @@ class ErrorHandlingMiddleware {
       const { type, errors } = ErrorHandlingMiddleware.formatJoiValidationErrors(error);
 
       res.status(StatusCodes.BAD_REQUEST).json({ success, type, errors });
-    } else {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ success, error: { name: error.name, message: error.message } });
     }
   }
 

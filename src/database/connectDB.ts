@@ -1,5 +1,3 @@
-import mongoose from 'mongoose';
-import serverConfig from '../config/config';
 import InternalServerError from '../errors/internalServerError';
 import IORM from './interfaces/ORM';
 
@@ -22,4 +20,4 @@ class DataBase {
   }
 }
 
-export default new DataBase(mongoose, serverConfig.MONGO_URI!);
+export default DataBase;
