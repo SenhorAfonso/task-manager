@@ -6,17 +6,21 @@ import userSchema from '../../../user/schema/userSchema';
 import server from '../../../server';
 
 let mongoServer: MongoMemoryServer;
+let mongoURI: string;
 
 describe('Check user\'s login route\'s http responses', () => {
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
-    const mongoURI = mongoServer.getUri();
-    mongoose.connect(mongoURI);
+    mongoURI = mongoServer.getUri();
+    await mongoose.connect(mongoURI);
   });
 
   afterEach(async () => {
-    await userSchema.collection.drop();
+    await userSchema.collection.deleteMany({});
+  });
+
+  afterAll(async () => {
     await mongoServer.stop();
     await mongoose.connection.close();
   });
@@ -119,6 +123,25 @@ describe('Check user\'s login route\'s http responses', () => {
     expect(response.body.success).toBeFalsy();
     expect(response.body.errors).toBeInstanceOf(Array);
     expect(response.body.errors).toHaveLength(2);
+
+  });
+
+  it('Should return 500 when the database is not connected', async () => {
+    await mongoose.connection.close();
+
+    const userSignUpPayload = {
+      email: 'pedroafonso@gmail.com',
+      password: 'password123'
+    };
+
+    const response = await request(server)
+      .post('/api/v1/user/login')
+      .send(userSignUpPayload);
+
+    await mongoose.connect(mongoURI);
+    expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+    expect(response.body.error.message).toBe('An internal server error ocurred. Please try again later.');
+    expect(response.body.success).toBeFalsy();
 
   });
 
