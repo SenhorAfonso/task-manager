@@ -5,6 +5,7 @@ import request from 'supertest';
 import server from '../../../server';
 import categorySchema from '../../../category/schema/categorySchema';
 import serverConfig from '../../../config/config';
+import TestUtils from '../../../utils/testUtils';
 
 let mongoServer: MongoMemoryServer;
 let mongoURI: string;
@@ -70,16 +71,10 @@ describe('Chech task\'s update route http responses', () => {
       color: 'Red'
     };
 
-    const categoryResponse = await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload)
-      .auth(token, { type: 'bearer' });
-
-    const taskId = categoryResponse.body.result._id;
+    const categoryId = await TestUtils.createCategory(token, createCategoryPayload);
 
     const response = await request(server)
-      .get(`/api/v1/category/${taskId}`)
-      .send(createCategoryPayload)
+      .get(`/api/v1/category/${categoryId}`)
       .auth(token, { type: 'bearer' });
 
     expect(response.status).toBe(StatusCodes.OK);
@@ -96,15 +91,10 @@ describe('Chech task\'s update route http responses', () => {
       color: 'Red'
     };
 
-    const categoryUser1 = await request(server)
-      .post('/api/v1/category')
-      .send(createCategoryPayload)
-      .auth(tokenUser1, { type: 'bearer' });
-
-    const taskUser1Id = categoryUser1.body.result._id;
+    const categoryUser1Id = await TestUtils.createCategory(tokenUser1, createCategoryPayload);
 
     const response = await request(server)
-      .get(`/api/v1/category/${taskUser1Id}`)
+      .get(`/api/v1/category/${categoryUser1Id}`)
       .send(createCategoryPayload)
       .auth(tokenUser2, { type: 'bearer' });
 
