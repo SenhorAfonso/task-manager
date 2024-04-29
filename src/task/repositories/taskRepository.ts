@@ -13,6 +13,7 @@ import categorySchema from '../../category/schema/categorySchema';
 import UnauthorizedAccessError from '../../errors/unauthorizedAccessError';
 import type nullable from '../../types/nullable';
 import type mongoDocument from '../../types/mongoDocument';
+import ITaskQueryObject from '../interface/ITaskQueryObject';
 import taskDocument from '../interface/taskDocument';
 
 class TaskRepository {
@@ -43,15 +44,19 @@ class TaskRepository {
     return { success, status, message, result };
   }
 
-  static async getAllTasks(userID: string) {
+  static async getAllTasks(userID: string, queryObject: ITaskQueryObject) {
     const status: number = StatusCodes.OK;
     const message: string = 'All task were retrieved!';
     const success: boolean = true;
 
     let result: nullable<taskDocument[]>;
+    const { limit, skip, sort } = queryObject;
 
     try {
-      result = await taskSchema.find({ userID });
+      result = await taskSchema.find({ userID })
+        .limit(limit)
+        .skip(skip)
+        .sort(sort) as taskDocument[];
     } catch (error) {
       throw new InternalServerError('An internal server error ocurred. Please try again later.');
     }

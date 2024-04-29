@@ -12,6 +12,7 @@ import DuplicatedContentError from '../../errors/duplicatedContentError';
 import UnauthorizedAccessError from '../../errors/unauthorizedAccessError';
 import type Nullable from '../../types/nullable';
 import type mongoDocument from '../../types/mongoDocument';
+import ICategoryQueryObject from '../interface/ICategoryQueryObject';
 
 class CategoryRepository {
 
@@ -40,15 +41,19 @@ class CategoryRepository {
     return { status, success, message, result };
   }
 
-  static async getAllCategories(userID: string) {
+  static async getAllCategories(userID: string, pagination: ICategoryQueryObject) {
     const status: number = StatusCodes.OK;
     const success: boolean = true;
     const message: string = "All user's categories retrieved successfully!";
-
     let result: Nullable<mongoDocument[]>;
 
+    const { limit, skip, sort, ...filter } = pagination;
+    const query = Object.assign(filter, { userID });
+
     try {
-      result = await categorySchema.find({ userID });
+      result = await categorySchema.find(query, null, { sort: { name: sort } })
+        .limit(limit)
+        .skip(skip);
     } catch (error) {
       throw new InternalServerError('An internal server error ocurred. Please try again later.');
     }
