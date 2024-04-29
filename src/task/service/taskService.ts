@@ -1,17 +1,18 @@
 import createTask from '../DTOs/createTask';
 import TaskRepository from '../repositories/taskRepository';
-import TaskUtils from '../utils/taskUtils';
 import IUpdateTask from '../DTOs/updateTask';
 import ITaskId from '../DTOs/ITaskId';
 import IQuerySearch from '../interface/IQuerySearch';
 import APIUtils from '../../utils/APIUtils';
 import taskDocument from '../interface/taskDocument';
+import ITaskQueryPayload from '../interface/ITaskQueryPayload';
 
 class TaskService {
 
   static createTask(createTaskPayload: createTask) {
-    const now = TaskUtils.getNowDate();
-    const conclusion = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 30));
+    const now = new Date();
+    const thirtDays = 2592e6;
+    const conclusion = new Date(now.getTime() + thirtDays);
 
     createTaskPayload.date_creation = now;
     createTaskPayload.date_conclusion = conclusion;
@@ -20,15 +21,16 @@ class TaskService {
     return result;
   }
 
-  static getAllTasks(userID: string) {
-    const result = TaskRepository.getAllTasks(userID);
+  static getAllTasks(userID: string, queryPayload: ITaskQueryPayload) {
+    const queryObject = APIUtils.createTaskQueryObject(queryPayload);
+    const result = TaskRepository.getAllTasks(userID, queryObject);
     return result;
   }
 
   static async getAllTasksByArray(userID: string, query: IQuerySearch) {
-    const queryObject = APIUtils.createQueryObject(query);
+    const queryObject = APIUtils.createTaskArrayQueryObject(query);
 
-    let { success, status, message, result } = await TaskRepository.getAllTasks(userID);
+    let { success, status, message, result } = await TaskRepository.getAllTasks(userID, { limit: 3, skip: 0, sort: 'asc' });
 
     if (queryObject.category) {
       result = await TaskService.getTaskByCategory(queryObject.category, result);
@@ -46,10 +48,10 @@ class TaskService {
   }
 
   static async getTasksInfo(userID: string) {
-    let { success, status, message, result } = await TaskRepository.getAllTasks(userID);
+    let { success, status, message, result } = await TaskRepository.getAllTasks(userID, { limit: 3, skip: 0, sort: 'asc' });
 
     const finishedTasks = this.getTaskByStatus('finished', result);
-    const biggestDescription = this.getBiggestDescription(result);
+    const longestDescription = this.LongestDescription(result);
     const oldestTask = this.getOldestTask(result);
 
     return {
@@ -57,9 +59,24 @@ class TaskService {
       status,
       message,
       result: {
-        conclusion_avg: result.length / finishedTasks.length,
-        biggest_description: biggestDescription,
-        oldest_task: oldestTask
+        number_of_tasks: result.length,
+        conclusion_avg: Number((finishedTasks.length / result.length).toFixed(2)),
+        longest_description: {
+          id: longestDescription.id,
+          title: longestDescription.title,
+          describe: longestDescription.description,
+          category: longestDescription.categoryID,
+          type: longestDescription.type,
+          status: longestDescription.status
+        },
+        oldest_task: {
+          id: oldestTask.id,
+          title: oldestTask.title,
+          describe: oldestTask.description,
+          category: oldestTask.categoryID,
+          type: oldestTask.type,
+          status: oldestTask.status
+        },
       }
     };
   }
@@ -89,7 +106,7 @@ class TaskService {
     const filteredArray: taskDocument[] = [];
 
     taskArray.forEach(element => {
-      if (element.categoryID.toString() === categoryID) {
+      if (element.categoryID?.toString() === categoryID) {
         filteredArray.push(element);
       }
     });
@@ -106,11 +123,11 @@ class TaskService {
   static getTaskByDate(expirationDate: string, taskArray: taskDocument[]) {
     let filteredArray: taskDocument[] = [];
 
-    filteredArray = taskArray.filter(element => element.date_conclusion.toLocaleDateString() === expirationDate);
+    filteredArray = taskArray.filter(element => element.date_conclusion?.toLocaleDateString() === expirationDate);
     return filteredArray;
   }
 
-  static getBiggestDescription(taskArray: taskDocument[]) {
+  static LongestDescription(taskArray: taskDocument[]): taskDocument {
     let biggestLenght: number = 0;
     let res: taskDocument = taskArray[0];
 
@@ -125,13 +142,13 @@ class TaskService {
     return res;
   }
 
-  static getOldestTask(taskArray: taskDocument[]) {
-    let oldest = taskArray[0].date_creation.getTime();
+  static getOldestTask(taskArray: taskDocument[]): taskDocument {
+    let oldest = taskArray[0].date_creation?.getTime();
     let result: taskDocument = taskArray[0];
 
     taskArray.forEach(element => {
-      if (element.date_creation.getTime() < oldest) {
-        oldest = element.date_conclusion.getTime();
+      if (element.date_creation!.getTime() <= oldest!) {
+        oldest = element.date_conclusion?.getTime();
         result = element;
       }
     });

@@ -1,4 +1,4 @@
-import TestUtils from '../../utils/testUtils';
+import TestUtils from '../../../utils/testUtils';
 import ValidateUser from '../../../user/validations/validateUser';
 
 describe('Validation payload for users sign-up route.', () => {

@@ -1,0 +1,2266 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Task Manager",
+    "description": "User signup and private task creation",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/v1/user/signup": {
+      "post": {
+        "summary": "User registration",
+        "description": "This route is responsible for registering users.",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User-sign-up-payload"
+              },
+              "examples": {
+                "Sign up user": {
+                  "value": {
+                    "username": "Pedro",
+                    "weight": 75,
+                    "email": "pedroafonso@gmail.com",
+                    "password": "password123",
+                    "confirmPassword": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User-sign-up-response"
+                },
+                "examples": {
+                  "user": {
+                    "value": {
+                      "success": true,
+                      "message": "User successfully registered!",
+                      "result": {
+                        "username": "Pedro",
+                        "weight": 75,
+                        "email": "pedroafonso@gmail.com",
+                        "password": "$2a$10$EXO/qM/LWImqgAq3A/PPeOZRpHhJa73O/jBd3KRM/XNlzn48VGlCm",
+                        "_id": "6596c25101db8bae95059880",
+                        "__v": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "DuplicatedContentError",
+                            "message": "The email entered is already registered!"
+                        }
+                      }
+                    }
+                  },
+                  "Validation-error": {
+                    "value": {
+                      "success": false,
+                      "type": "validationError",
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "type":"object",
+                          "properties": {
+                            "resource": "username",
+                            "message": "\"username\" is required"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/login": {
+      "post": {
+        "summary": "User log-in",
+        "description": "This route is responsible for log users in.",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User-sign-in-payload"
+              },
+              "examples": {
+                "Login user": {
+                  "value": {
+                    "email": "pedroafonso@gmail.com",
+                    "password": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User-sign-in-response"
+                },
+                "examples": {
+                  "user": {
+                    "value": {
+                      "success": true,
+                      "message": "User successfully logged in",
+                      "data": {
+                        "user": {
+                          "_id": "6595ae1287e001859f5becc0",
+                          "username": "Pedro",
+                          "weight": 75,
+                          "email": "pedroafonso@gmail.com",
+                          "password": "$2a$10$EXO/qM/LWImqgAq3A/PPeOZRpHhJa73O/jBd3KRM/XNlzn48VGlCm",
+                          "__v": 0
+                        },
+                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTk1YWUxMjg3ZTAwMTg1OWY1YmVjYzAiLCJpYXQiOjE3MDQzMDg0MzR9.fJ6RmVW26Va9dEedJgLcKGQiJTG5aANeHV0FOLXZnqU"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Payload invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/validation-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "DuplicatedContentError",
+                            "message": "The email entered is already registered!"
+                        }
+                      }
+                    }
+                  },
+                  "Validation-error": {
+                    "value": {
+                      "success": false,
+                      "type": "validationError",
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "type":"object",
+                          "properties": {
+                            "resource": "email",
+                            "message": "\"email\" is required"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "Invalid Payload",
+                            "message": "The email or password is incorrect!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/v1/category/": {
+      "post": {
+        "summary": "Category creation",
+        "description": "This route is responsible for create a new category.",
+        "tags": [
+          "Category"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Category-create-payload"
+              },
+              "examples": {
+                "Create a category": {
+                  "value": {
+                    "name": "Graduation",
+                    "color": "Red"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Category-create-response"
+                },
+                "examples": {
+                  "user": {
+                    "value": {
+                      "success": true,
+                      "message": "Category successfully created!",
+                      "result": {
+                          "name": "Graduation",
+                          "color": "Red",
+                          "userID": "662ed5b2b552469da1fa5a4f",
+                          "_id": "6596cda743f6e44d352bd30b",
+                          "__v": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Payload invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/validation-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "type": "validationError",
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "type":"object",
+                          "properties": {
+                            "resource": "name",
+                            "message": "\"name\" is required"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "Unauthorized",
+                            "message": "Not Authenticated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/v1/category/{id}": {
+      "get": {
+        "summary": "Retrieve a category by its id",
+        "description": "This route is responsible for retrieve category based in their id.",
+        "tags": [
+          "Category"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id of the category to be retrieved",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category retrieved successfully!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Category-get-id-response"
+                },
+                "examples": {
+                  "category": {
+                    "value": {
+                      "success": true,
+                      "message": "Category retrieved successfully!",
+                      "result": {
+                        "_id": "662edd46938178d06d6d51ce",
+                        "name": "Graduation",
+                        "color": "Red",
+                        "userID": "662ed5b2b552469da1fa5a4f",
+                        "__v": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Payload invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "BadRequestError",
+                            "message": "The format of the id \"x\" is invalid!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "NotFoundError",
+                            "message": "The id \"${categoryID}\" is not associated with any element!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "Unauthorized",
+                            "message": "Not Authenticated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a category by its id",
+        "description": "This route is responsible for update an category info based in their id.",
+        "tags": [
+          "Category"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Category-create-payload"
+              },
+              "examples": {
+                "Create a category": {
+                  "value": {
+                    "name": "Graduation",
+                    "color": "Red"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id of the category to be updated",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category updated successfully!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Category-get-id-response"
+                },
+                "examples": {
+                  "category": {
+                    "value": {
+                      "success": true,
+                      "message": "Category updated successfully!",
+                      "result": {
+                        "_id": "662edd46938178d06d6d51ce",
+                        "name": "Graduation",
+                        "color": "Red",
+                        "userID": "662ed5b2b552469da1fa5a4f",
+                        "__v": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Payload invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/validation-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "type": "validationError",
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "type":"object",
+                          "properties": {
+                            "resource": "name",
+                            "message": "\"name\" is required"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "NotFoundError",
+                            "message": "The id \"${categoryID}\" is not associated with any element!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "Unauthorized",
+                            "message": "Not Authenticated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a category by its id",
+        "description": "This route is responsible for delete category based in their id.",
+        "tags": [
+          "Category"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id of the category to be deleted",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Category-create-response"
+                },
+                "examples": {
+                  "user": {
+                    "value": {
+                      "success": true,
+                      "message": "Category deleted successfully!",
+                      "result": {
+                          "name": "Graduation",
+                          "color": "Red",
+                          "userID": "662ed5b2b552469da1fa5a4f",
+                          "_id": "6596cda743f6e44d352bd30b",
+                          "__v": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Payload invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "BadRequestError",
+                            "message": "The format of the id \"x\" is invalid!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "NotFoundError",
+                            "message": "The id \"${categoryID}\" is not associated with any element!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "Unauthorized",
+                            "message": "Not Authenticated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/category": {
+      "get": {
+        "summary": "Retrieve an array of category",
+        "description": "This route is responsible for retrieve an array of categories based on a query object.",
+        "tags": [
+          "Category"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Name of the category to be retrieved",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "color",
+            "in": "query",
+            "description": "Color of the category to be retrieved",
+            "schema": {
+              "type": "string",
+              "enum": ["Green", "Yellow", "Orange", "Red", "Pink", "Purple", "Gray", "Cyan", "Blue"]
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit of the category to be retrieved",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sort of the category to be retrieved",
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"]
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page of the category to be retrieved",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Skip of the category to be retrieved",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Category-get-many-response"
+                },
+                "examples": {
+                  "category": {
+                    "value": {
+                      "success": true,
+                      "message": "All user's categories retrieved successfully!",
+                      "result": [
+                          {
+                            "_id": "6596d9d9d9617f1d2c84c664",
+                            "name": "Graduation",
+                            "color": "Red",
+                            "userId": "6596bb881328f7b72ba8c2b6",
+                            "__v": 0
+                          },
+                          {
+                            "_id": "6596cda743f6e44d352bd30b",
+                            "name": "House",
+                            "color": "Yellow",
+                            "userId": "65917cc0556dfaf9fa265387",
+                            "__v": 0
+                          },
+                          {
+                            "_id": "6596d9cad9617f1d2c84c662",
+                            "name": "Homework",
+                            "color": "Blue",
+                            "userId": "6596bb881328f7b72ba8c2b6",
+                            "__v": 0
+                          }
+                      ] 
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "NotFoundError",
+                            "message": "There is no category registered!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "Unauthorized",
+                            "message": "Not Authenticated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/v1/task": {
+      "get": {
+        "summary": "Retrieve an array of tasks",
+        "description": "This route is responsible for retrieve an array of tasks based on a query object.",
+        "tags": [
+          "Task"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit of the tasks to be retrieved",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sort of the tasks to be retrieved",
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"]
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page of the tasks to be retrieved",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Skip of the tasks to be retrieved",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/task-getall-response"
+                },
+                "examples": {
+                  "tasks": {
+                    "value": {
+                      "success": true,
+                      "message": "All tasks tasks retrieved!",
+                      "count": 3,
+                      "result": [
+                          {
+                            "_id": "6596d9d9d9617f1d2c84c664",
+                            "title": "task title",
+                            "description": "task description",
+                            "date_creation": "2024-04-29T16:52:59.839Z",
+                            "date_conclusion": "2024-05-29T16:52:59.839Z",
+                            "type": "teste",
+                            "categoryID": "662fcffb1de0f52388697215",
+                            "status": "pending",
+                            "userID": "662fba2a5475f52afc0c60eb",
+                            "__v": 0
+                          },
+                          {
+                            "_id": "6596cda743f6e44d352bd30b",
+                            "title": "task title",
+                            "description": "task description",
+                            "date_creation": "2024-04-29T16:52:59.839Z",
+                            "date_conclusion": "2024-05-29T16:52:59.839Z",
+                            "type": "teste",
+                            "categoryID": "662fcffb1de0f52388697215",
+                            "status": "pending",
+                            "userID": "662fba2a5475f52afc0c60eb",
+                            "__v": 0
+                          },
+                          {
+                            "_id": "6596d9cad9617f1d2c84c662",
+                            "title": "task title",
+                            "description": "task description",
+                            "date_creation": "2024-04-29T16:52:59.839Z",
+                            "date_conclusion": "2024-05-29T16:52:59.839Z",
+                            "type": "teste",
+                            "categoryID": "662fcffb1de0f52388697215",
+                            "status": "pending",
+                            "userID": "662fba2a5475f52afc0c60eb",
+                            "__v": 0
+                          }
+                      ] 
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Tasks Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "NotFoundError",
+                            "message": "The user have no task registered!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "Unauthorized",
+                            "message": "Not Authenticated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new task",
+        "description": "This route is responsible for creting a new task.",
+        "tags": [
+          "Task"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task-create-payload"
+              },
+              "examples": {
+                "Create a task": {
+                  "value": {
+                    "title": "task title",
+                    "description": "task description",
+                    "type": "Task Type",
+                    "category": "Task Category",
+                    "status": "Task Status: [pending, in-progress, finished]"
+                  }                
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Category-get-many-response"
+                },
+                "examples": {
+                  "tasks": {
+                    "value": {
+                      "success": true,
+                      "message": "Task successfully created!",
+                      "result": {
+                          "title": "Task title",
+                          "description": "task description",
+                          "date_creation": "2024-04-29T16:52:59.839Z",
+                          "date_conclusion": "2024-05-29T16:52:59.839Z",
+                          "type": "Task Type",
+                          "categoryID": "662fcffb1de0f52388697215",
+                          "status": "Task Status: [pending, in-progress, finished]",
+                          "userID": "662fba2a5475f52afc0c60eb",
+                          "_id": "662fd06b1de0f52388697228",
+                          "__v": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Payload invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/validation-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "type": "validationError",
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "type":"object",
+                          "properties": {
+                            "resource": "title",
+                            "message": "\"title\" is required"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "Unauthorized",
+                            "message": "Not Authenticated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/v1/task/{id}": {
+      "get": {
+        "summary": "Retrieve a task by its id",
+        "description": "This route is responsible for retrieve task based in their id.",
+        "tags": [
+          "Task"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id of the task to be retrieved",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task retrieved successfully!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Task-get-id-response"
+                },
+                "examples": {
+                  "task": {
+                    "value": {
+                      "success": true,
+                      "message": "Task retrieved successfully!",
+                      "result": {
+                        "_id": "662edd46938178d06d6d51ce",
+                        "title": "Task title",
+                        "description": "Task Description",
+                        "type": "Task Type",
+                        "category": "Task Category",
+                        "status": "Task Status: [pending, in-progress, finished]",
+                        "__v": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Payload invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "BadRequestError",
+                            "message": "The format of the id \"x\" is invalid!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Task Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "NotFoundError",
+                            "message": "The id \"${taskID}\" is not associated with any element!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "Unauthorized",
+                            "message": "Not Authenticated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a task by its id",
+        "description": "This route is responsible for update an task info based in their id.",
+        "tags": [
+          "Task"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task-create-payload"
+              },
+              "examples": {
+                "Create a task": {
+                  "value": {
+                    "title": "task title",
+                    "description": "task description",
+                    "type": "Task Type",
+                    "category": "Task Category",
+                    "status": "Task Status: [pending, in-progress, finished]"
+                  }                
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id of the task to be updated",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task updated successfully!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Task-get-id-response"
+                },
+                "examples": {
+                  "task": {
+                    "value": {
+                      "success": true,
+                      "message": "Task information were updated!",
+                      "result": {
+                        "title": "Task title",
+                        "description": "Task Description",
+                        "type": "Task Type",
+                        "category": "Task Category",
+                        "status": "Task Status: [pending, in-progress, finished]",
+                        "userID": "662ed5b2b552469da1fa5a4f",
+                        "__v": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Payload invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/validation-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "type": "validationError",
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "type":"object",
+                          "properties": {
+                            "resource": "title",
+                            "message": "\"title\" is required"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Task Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "NotFoundError",
+                            "message": "The id \"${taskID}\" is not associated with any element!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "Unauthorized",
+                            "message": "Not Authenticated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a task by its id",
+        "description": "This route is responsible for delete task based in their id.",
+        "tags": [
+          "Task"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id of the task to be deleted",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/"
+                },
+                "examples": {
+                  "user": {
+                    "value": {
+                      "success": true,
+                      "message": "Task were successfully deleted!",
+                      "deleted task": {
+                          "_id": "662fd06b1de0f52388697228",
+                          "title": "teste2",
+                          "description": "teste2",
+                          "date_creation": "2024-04-29T16:52:59.839Z",
+                          "date_conclusion": "2024-05-29T16:52:59.839Z",
+                          "type": "teste",
+                          "categoryID": "662fcffb1de0f52388697215",
+                          "status": "pending",
+                          "userID": "662fba2a5475f52afc0c60eb",
+                          "__v": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Payload invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "BadRequestError",
+                            "message": "The format of the id \"x\" is invalid!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Task Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "NotFoundError",
+                            "message": "The id \"${taskID}\" is not associated with any element!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "Unauthorized",
+                            "message": "Not Authenticated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/v1/task-array": {
+      "get": {
+        "summary": "Retrieve an array of tasks filtered by javascripts array methods",
+        "description": "This route is responsible for retrieve an array of tasks based on a query object.",
+        "tags": [
+          "Task"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "conclusion",
+            "in": "query",
+            "description": "Conclusion date of the tasks to be retrieved",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Status of the tasks to be retrieved",
+            "schema": {
+              "type": "string",
+              "enum": ["pending", "in-progress", "finished"]
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Category of the tasks to be retrieved",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit of the tasks to be retrieved",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sort of the tasks to be retrieved",
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"]
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page of the tasks to be retrieved",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Skip of the tasks to be retrieved",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Category-get-many-response"
+                },
+                "examples": {
+                  "tasks": {
+                    "value": {
+                      "success": true,
+                      "message": "All tasks tasks retrieved!",
+                      "result": [
+                          {
+                            "_id": "6596d9d9d9617f1d2c84c664",
+                            "title": "task title",
+                            "description": "task description",
+                            "date_creation": "2024-04-29T16:52:59.839Z",
+                            "date_conclusion": "2024-05-29T16:52:59.839Z",
+                            "type": "teste",
+                            "categoryID": "662fcffb1de0f52388697215",
+                            "status": "pending",
+                            "userID": "662fba2a5475f52afc0c60eb",
+                            "__v": 0
+                          },
+                          {
+                            "_id": "6596cda743f6e44d352bd30b",
+                            "title": "task title",
+                            "description": "task description",
+                            "date_creation": "2024-04-29T16:52:59.839Z",
+                            "date_conclusion": "2024-05-29T16:52:59.839Z",
+                            "type": "teste",
+                            "categoryID": "662fcffb1de0f52388697215",
+                            "status": "pending",
+                            "userID": "662fba2a5475f52afc0c60eb",
+                            "__v": 0
+                          },
+                          {
+                            "_id": "6596d9cad9617f1d2c84c662",
+                            "title": "task title",
+                            "description": "task description",
+                            "date_creation": "2024-04-29T16:52:59.839Z",
+                            "date_conclusion": "2024-05-29T16:52:59.839Z",
+                            "type": "teste",
+                            "categoryID": "662fcffb1de0f52388697215",
+                            "status": "pending",
+                            "userID": "662fba2a5475f52afc0c60eb",
+                            "__v": 0
+                          }
+                      ] 
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Task Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "NotFoundError",
+                            "message": "The user have no task registered!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "Unauthorized",
+                            "message": "Not Authenticated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/task-info": {
+      "get": {
+        "summary": "Retrieve an object of tasks infos",
+        "description": "This route is responsible for retrieve an object of tasks infos.",
+        "tags": [
+          "Task"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "conclusion",
+            "in": "query",
+            "description": "Conclusion date of the tasks to be retrieved",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Status of the tasks to be retrieved",
+            "schema": {
+              "type": "string",
+              "enum": ["pending", "in-progress", "finished"]
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Category of the tasks to be retrieved",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit of the tasks to be retrieved",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sort of the tasks to be retrieved",
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"]
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page of the tasks to be retrieved",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Skip of the tasks to be retrieved",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Task-info-response"
+                },
+                "examples": {
+                  "tasks": {
+                    "value": {
+                      "success": true,
+                      "message": "All tasks tasks retrieved!",
+                      "result": [
+                          {
+                            "_id": "6596d9d9d9617f1d2c84c664",
+                            "title": "task title",
+                            "description": "task description",
+                            "date_creation": "2024-04-29T16:52:59.839Z",
+                            "date_conclusion": "2024-05-29T16:52:59.839Z",
+                            "type": "teste",
+                            "categoryID": "662fcffb1de0f52388697215",
+                            "status": "pending",
+                            "userID": "662fba2a5475f52afc0c60eb",
+                            "__v": 0
+                          },
+                          {
+                            "_id": "6596cda743f6e44d352bd30b",
+                            "title": "task title",
+                            "description": "task description",
+                            "date_creation": "2024-04-29T16:52:59.839Z",
+                            "date_conclusion": "2024-05-29T16:52:59.839Z",
+                            "type": "teste",
+                            "categoryID": "662fcffb1de0f52388697215",
+                            "status": "pending",
+                            "userID": "662fba2a5475f52afc0c60eb",
+                            "__v": 0
+                          },
+                          {
+                            "_id": "6596d9cad9617f1d2c84c662",
+                            "title": "task title",
+                            "description": "task description",
+                            "date_creation": "2024-04-29T16:52:59.839Z",
+                            "date_conclusion": "2024-05-29T16:52:59.839Z",
+                            "type": "teste",
+                            "categoryID": "662fcffb1de0f52388697215",
+                            "status": "pending",
+                            "userID": "662fba2a5475f52afc0c60eb",
+                            "__v": 0
+                          }
+                      ] 
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "NotFoundError",
+                            "message": "The user have no task registered!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref":"#/components/schemas/API-error"
+                },
+                "examples": {
+                  "API-error": {
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                            "name": "Unauthorized",
+                            "message": "Not Authenticated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+
+      "User-sign-up-payload": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "confirmPassword": {
+            "type": "string"
+          }
+        }
+      },
+      "User-sign-up-response": {
+        "type": "object",
+        "properties": {
+          "sucess": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "birthDate": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              },
+              "confirmPassword": {
+                "type": "string"
+              }
+            }
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "User-sign-in-payload": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "User-sign-in-response": {
+        "type": "object",
+        "properties": {
+          "sucess": "boolean",
+          "message": "string",
+          "data": {
+            "user": {
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "birthDate": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              },
+              "confirmPassword": {
+                "type": "string"
+              }
+            },
+            "token": "string"
+          }
+        }
+      },
+      "Category-create-payload": {
+        "type":"object",
+        "properties": {
+          "name": {
+            "type":"string"
+          },
+          "color": {
+            "type":"string",
+            "enum": ["Green", "Yellow", "Orange", "Red", "Pink", "Purple", "Gray", "Cyan", "Blue"]
+          }
+        }
+      },
+      "Category-create-response": {
+        "type": "object",
+        "properties": {
+          "sucess": {
+            "type":"boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type":"string"
+              },
+              "color": {
+                "type":"string",
+                "enum": ["Green", "Yellow", "Orange", "Red", "Pink", "Purple", "Gray", "Cyan", "Blue"]
+              }
+            }
+          }
+        }
+      },
+      "Category-get-id-response": {
+        "type": "object",
+        "properties": {
+          "sucess": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "_id":"string",
+              "name": "string",
+              "color": {
+                "type": "string",
+                "enum": ["Green", "Yellow", "Orange", "Red", "Pink", "Purple", "Gray", "Cyan", "Blue"]
+              },
+              "userID": "string"
+            }
+          }
+        }
+      },
+      "Category-get-many-response": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type":"boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "count": "number",
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties":{
+                "dayOfWeek": {
+                  "type":"string"
+                },
+                "description": {
+                  "type":"string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "task-getall-response": {
+        "type": "object",
+        "properties": {
+          "success":"boolean",
+          "message": "string",
+          "count": "number",
+          "result": {
+            "type":"array",
+            "item": {
+              "type": "object",
+              "properties": {
+                "title": "string",
+                "description": "string",
+                "type": "string",
+                "category": "string",
+                "status": {
+                  "type": "string",
+                  "enum": ["finished", "on-progress", "pending"]
+                }
+              }
+            }
+          }
+        }
+      },
+      "Task-create-payload": {
+        "type":"object",
+        "properties": {
+          "title": "string",
+          "description": "string",
+          "type": "string",
+          "category": "string",
+          "status": {
+            "type": "string",
+            "enum": ["finished", "on-progress", "pending"]
+          }
+        }
+      },
+      "Task-create-response": {
+        "type":"object",
+        "properties": {
+          "success": "boolean",
+          "message": "string",
+          "result": {
+            "type": "object",
+            "properties": {
+              "title": "string",
+              "description": "string",
+              "type": "string",
+              "category": "string",
+              "status": {
+                "type": "string",
+                "enum": ["finished", "on-progress", "pending"]
+              }
+            }
+          }         
+        }
+      },
+      "Task-get-id-response": {
+        "type": "object",
+        "properties": {
+          "sucess": "boolean",
+          "message": "string",
+          "result": {
+            "type": "object",
+            "properties": {
+              "title": "string",
+              "description": "string",
+              "type": "string",
+              "category": "string",
+              "status": {
+                "type": "string",
+                "enum": ["finished", "on-progress", "pending"]
+              }
+            }
+          }
+        }
+      },
+      "Task-info-response": {
+        "type": "object",
+        "properties": {
+          "sucess": "boolean",
+          "message": "string",
+          "result": {
+            "type": "object",
+            "properties": {
+              "number_of_tasks": "number",
+              "conclusion_avg": "number",
+              "longest_description": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Task-create-payload"
+                }
+              },
+              "oldest_task": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Task-create-payload"
+                } 
+              }
+            }
+          }
+        }
+      },
+      "API-error": {
+        "type": "object",
+        "properties": {
+          "success": "boolean",
+          "error": {
+            "type": "object",
+            "properties": {
+              "name": "string",
+              "message": "string"
+            }
+          }
+        }
+      },
+      "validation-error": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "errors": {
+            "type":"array",
+            "items": {
+              "type":"object",
+              "properties": {
+                "resource": {
+                  "type":"string"
+                },
+                "message": {
+                  "type":"string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

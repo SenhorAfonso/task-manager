@@ -1,5 +1,7 @@
 import IAuthenticatedDocument from '../interface/IAuthenticatedDocument';
 import IQuerySearch from '../task/interface/IQuerySearch';
+import ITaskQueryObject from '../task/interface/ITaskQueryObject';
+import ITaskQueryPayload from '../task/interface/ITaskQueryPayload';
 import taskDocument from '../task/interface/taskDocument';
 
 class APIUtils {
@@ -14,7 +16,26 @@ class APIUtils {
     return target.userID.toString() !== userID;
   }
 
-  static createQueryObject(query: IQuerySearch): IQuerySearch {
+  static createTaskQueryObject(queryPayload: ITaskQueryPayload) {
+    const defaultLimit = 3;
+    const defaultPage = 1;
+    const defaultSkip = 0;
+
+    const limit = Number(queryPayload.limit) || defaultLimit;
+    const page = Number(queryPayload.page) || defaultPage;
+    const sort = queryPayload.sort || 'asc';
+    const skip = (page - defaultPage) * limit || Number(queryPayload.skip) || defaultSkip;
+
+    const queryObject: ITaskQueryObject = {
+      limit,
+      skip,
+      sort,
+    };
+
+    return queryObject;
+  }
+
+  static createTaskArrayQueryObject(query: IQuerySearch): IQuerySearch {
     const queryObject: IQuerySearch = {};
 
     if (query.category) {
@@ -33,7 +54,7 @@ class APIUtils {
   }
 
   static createCustomFilter(status: string) {
-    return function(task: taskDocument) {
+    return function filter(task: taskDocument) {
       return task.status === status;
     };
   }
